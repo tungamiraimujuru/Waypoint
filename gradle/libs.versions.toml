@@ -34,6 +34,7 @@ espressoCore = "3.6.1"
 turbine = "1.2.0"
 truth = "1.4.4"
 mockk = "1.13.13"
+junitJunit = "4.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -85,6 +86,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
