@@ -75,8 +75,9 @@ internal class SseClient @Inject constructor(
                 }
             }
         } catch (cancellation: kotlinx.coroutines.CancellationException) {
-            throw cancellation   // propagate, do not wrap
+            throw cancellation
         } catch (t: Throwable) {
+            android.util.Log.e("SseClient", "SSE error", t)
             throw t.toAiError()
         }
     }

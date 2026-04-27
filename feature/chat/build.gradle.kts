@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
+    implementation(project(":core:ai"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -39,7 +40,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
-
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.hilt.android)

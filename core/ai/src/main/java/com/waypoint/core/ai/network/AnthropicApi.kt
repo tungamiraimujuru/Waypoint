@@ -14,9 +14,9 @@ internal object AnthropicApi {
 
 @Serializable
 internal data class AnthropicRequest(
-    val model: String = AnthropicApi.DEFAULT_MODEL,
-    @SerialName("max_tokens") val maxTokens: Int = AnthropicApi.MAX_TOKENS,
-    val stream: Boolean = true,
+    val model: String,
+    @SerialName("max_tokens") val maxTokens: Int,
+    val stream: Boolean,
     val system: String? = null,
     val messages: List<AnthropicMessage>
 )
@@ -39,5 +39,11 @@ internal fun List<ChatMessage>.toAnthropicRequest(): AnthropicRequest {
             content = it.content
         )
     }
-    return AnthropicRequest(system = system, messages = turns)
+    return AnthropicRequest(
+        model = AnthropicApi.DEFAULT_MODEL,
+        maxTokens = AnthropicApi.MAX_TOKENS,
+        stream = true,
+        system = system?.takeIf { it.isNotBlank() },
+        messages = turns
+    )
 }
