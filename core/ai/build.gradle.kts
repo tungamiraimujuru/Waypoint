@@ -49,8 +49,12 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
 
-    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
+    implementation(libs.ktor.client.core)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
@@ -58,5 +62,6 @@ dependencies {
     testImplementation(libs.truth)
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.kotlinx.datetime)
     testImplementation(libs.mockk)
 }
