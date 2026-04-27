@@ -34,13 +34,5 @@ internal object AiProvidersModule {
 
     @Provides
     @Singleton
-    fun provideJson(): Json = Json {
-        ignoreUnknownKeys = true
-        explicitNulls = false
-        encodeDefaults = true
-    }
-
-    @Provides
-    @Singleton
     fun provideHttpClient(json: Json): HttpClient = buildHttpClient(json)
 }
