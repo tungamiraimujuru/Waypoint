@@ -38,7 +38,7 @@ dependencies {
     implementation(project(":core:ai"))
 
     implementation(libs.kotlinx.coroutines.android)
-
+    implementation(libs.kotlinx.datetime)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 

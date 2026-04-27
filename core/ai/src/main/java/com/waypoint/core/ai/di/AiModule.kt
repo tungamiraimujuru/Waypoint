@@ -37,6 +37,7 @@ internal object AiProvidersModule {
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         explicitNulls = false
+        encodeDefaults = true
     }
 
     @Provides
