@@ -2,12 +2,10 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, develop]
   push:
-    branches: [main]
+    branches: [main, develop]
 
-# Cancel in-progress runs when a new commit is pushed to the same PR.
-# Saves CI minutes and avoids stale "running" statuses.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -37,9 +35,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # Gradle reads local.properties for ANTHROPIC_API_KEY. CI doesn't have
-      # the real key — we write a stub so the build proceeds. The resulting
-      # APK can't talk to Anthropic, but the build, lint, and tests all run.
       - name: Create stub local.properties
         run: |
           echo "ANTHROPIC_API_KEY=ci-stub-key" > local.properties
