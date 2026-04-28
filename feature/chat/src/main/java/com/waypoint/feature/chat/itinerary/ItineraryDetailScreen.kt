@@ -15,45 +15,49 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import com.waypoint.core.data.ItineraryRepository
 import com.waypoint.core.domain.model.Activity
 import com.waypoint.core.domain.model.Day
 import com.waypoint.core.domain.model.Itinerary
+import com.waypoint.core.ui.theme.WayPointTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 // ─── route + args ──────────────────────────────────────────────
 
@@ -101,7 +105,7 @@ fun ItineraryDetailRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     when (val s = state) {
-        ItineraryDetailState.Loading -> LoadingScreen()
+        ItineraryDetailState.Loading -> LoadingScreen(onBack = onBack)
         ItineraryDetailState.NotFound -> NotFoundScreen(onBack = onBack)
         is ItineraryDetailState.Ready -> ItineraryDetailScreen(
             itinerary = s.itinerary,
@@ -112,13 +116,21 @@ fun ItineraryDetailRoute(
 
 // ─── states ────────────────────────────────────────────────────
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LoadingScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
+private fun LoadingScreen(onBack: () -> Unit) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = { DetailTopBar(onBack = onBack) }
+    ) { padding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+        }
     }
 }
 
@@ -126,16 +138,8 @@ private fun LoadingScreen() {
 @Composable
 private fun NotFoundScreen(onBack: () -> Unit) {
     Scaffold(
-        topBar = {
-            LargeTopAppBar(
-                title = { Text("Itinerary") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = { DetailTopBar(onBack = onBack) }
     ) { padding ->
         Box(
             modifier = Modifier
@@ -158,124 +162,212 @@ private fun ItineraryDetailScreen(
     itinerary: Itinerary,
     onBack: () -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            LargeTopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = itinerary.title,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Text(
-                            text = itinerary.destination,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = { DetailTopBar(onBack = onBack) }
     ) { padding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Header summary
-            item {
-                Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.LocationOn,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Column {
-                            Text(
-                                text = "${itinerary.days.size} days · ${itinerary.activityCount} activities",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Medium
-                            )
-                            Text(
-                                text = itinerary.destination,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
-            }
+            item { ItineraryHeader(itinerary = itinerary) }
+            item { ItinerarySummaryChip(itinerary = itinerary) }
+            item { Spacer(Modifier.height(4.dp)) }
+            item { TimelineColumn(days = itinerary.days) }
+        }
+    }
+}
 
-            // Day-by-day breakdown
-            itinerary.days.forEach { day ->
-                item(key = "day-header-${day.dayNumber}") {
-                    DayHeader(day = day)
-                }
-                items(
-                    count = day.activities.size,
-                    key = { idx -> "act-${day.dayNumber}-$idx" }
-                ) { idx ->
-                    ActivityCard(activity = day.activities[idx])
-                }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DetailTopBar(onBack: () -> Unit) {
+    val borderColor = Color.Gray.copy(alpha = 0.45f)
+    TopAppBar(
+        modifier = Modifier.drawBehind {
+            val strokeWidth = 1.dp.toPx()
+            drawLine(
+                color = borderColor,
+                start = Offset(0f, size.height),
+                end = Offset(size.width, size.height),
+                strokeWidth = strokeWidth
+            )
+        },
+        title = {
+            Text(
+                text = "WAYPOINT",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 3.sp
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background
+        )
+    )
+}
+
+// ─── header ────────────────────────────────────────────────────
+
+@Composable
+private fun ItineraryHeader(itinerary: Itinerary) {
+    Column {
+        Text(
+            text = "ITINERARY",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+            letterSpacing = 1.5.sp
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = itinerary.title,
+            style = MaterialTheme.typography.displayMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = itinerary.destination,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun ItinerarySummaryChip(itinerary: Itinerary) {
+    val activityCount = itinerary.days.sumOf { it.activities.size }
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = RoundedCornerShape(12.dp)
+            )
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.LocationOn,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "${itinerary.days.size} days · $activityCount activities",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = itinerary.destination,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
 }
 
-private val Itinerary.activityCount: Int
-    get() = days.sumOf { it.activities.size }
+// ─── timeline ──────────────────────────────────────────────────
 
+/**
+ * Same visual language as the chat preview card's timeline:
+ * one continuous amber spine, with day markers and activity bullets
+ * pinned to it. The detail screen variant gives each activity its own
+ * card-shaped surface for legibility, since this is the long-form view.
+ */
 @Composable
-private fun DayHeader(day: Day) {
-    Column(modifier = Modifier.padding(top = 8.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "${day.dayNumber}",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Bold
+private fun TimelineColumn(days: List<Day>) {
+    val spineColor = MaterialTheme.colorScheme.primary
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .drawBehind {
+                val x = 8.dp.toPx()
+                drawLine(
+                    color = spineColor.copy(alpha = 0.5f),
+                    start = Offset(x, 0f),
+                    end = Offset(x, size.height),
+                    strokeWidth = 1.5f
                 )
             }
-            Spacer(Modifier.width(12.dp))
-            Text(
-                text = "Day ${day.dayNumber}",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium
-            )
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(28.dp)) {
+            days.forEach { day ->
+                TimelineDay(day = day, spineColor = spineColor)
+            }
         }
-        Spacer(Modifier.height(4.dp))
-        Text(
-            text = day.summary,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 40.dp)
+    }
+}
+
+@Composable
+private fun TimelineDay(day: Day, spineColor: Color) {
+    Column {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            DayMarker(color = spineColor)
+            Spacer(Modifier.width(12.dp))
+            Column {
+                Text(
+                    text = "DAY ${day.dayNumber}",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    letterSpacing = 1.2.sp
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = day.summary,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+
+        Spacer(Modifier.height(14.dp))
+
+        Column(
+            modifier = Modifier.padding(start = 28.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            day.activities.forEach { activity ->
+                ActivityCard(activity = activity)
+            }
+        }
+    }
+}
+
+@Composable
+private fun DayMarker(color: Color) {
+    Box(
+        modifier = Modifier.size(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .size(12.dp)
+                .background(color, CircleShape)
         )
     }
 }
@@ -284,12 +376,12 @@ private fun DayHeader(day: Day) {
 private fun ActivityCard(activity: Activity) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
         modifier = Modifier
             .fillMaxWidth()
             .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
+                width = 0.5.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f),
                 shape = RoundedCornerShape(12.dp)
             )
     ) {
@@ -299,19 +391,19 @@ private fun ActivityCard(activity: Activity) {
                     text = activity.time,
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.5.sp,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.width(56.dp)
                 )
                 Text(
                     text = activity.title,
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.weight(1f)
                 )
             }
             if (activity.description.isNotBlank()) {
-                Spacer(Modifier.height(6.dp))
+                Spacer(Modifier.height(8.dp))
                 Text(
                     text = activity.description,
                     style = MaterialTheme.typography.bodyMedium,
@@ -320,7 +412,7 @@ private fun ActivityCard(activity: Activity) {
                 )
             }
             if (activity.locationName.isNotBlank()) {
-                Spacer(Modifier.height(6.dp))
+                Spacer(Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.padding(start = 56.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -329,7 +421,7 @@ private fun ActivityCard(activity: Activity) {
                     Icon(
                         imageVector = Icons.Default.LocationOn,
                         contentDescription = null,
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(12.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(

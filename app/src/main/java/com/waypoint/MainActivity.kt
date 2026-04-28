@@ -13,11 +13,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.waypoint.core.ui.theme.WayPointTheme
 import com.waypoint.feature.chat.ChatRoute
 import com.waypoint.feature.chat.itinerary.ITINERARY_ARG_ID
 import com.waypoint.feature.chat.itinerary.ITINERARY_ROUTE_PATTERN
 import com.waypoint.feature.chat.itinerary.ItineraryDetailRoute
 import com.waypoint.feature.chat.itinerary.itineraryRoute
+import com.waypoint.feature.chat.saved.SAVED_ROUTE
+import com.waypoint.feature.chat.saved.SavedRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,36 +29,47 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MaterialTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val navController = rememberNavController()
-                    NavHost(
-                        navController = navController,
-                        startDestination = "chat"
+            WayPointTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
                     ) {
-                        composable("chat") {
-                            ChatRoute(
-                                onOpenItinerary = { id ->
-                                    navController.navigate(itineraryRoute(id))
-                                }
-                            )
-                        }
-                        composable(
-                            route = ITINERARY_ROUTE_PATTERN,
-                            arguments = listOf(
-                                navArgument(ITINERARY_ARG_ID) { type = NavType.StringType }
-                            )
+                        val navController = rememberNavController()
+                        NavHost(
+                            navController = navController,
+                            startDestination = "chat"
                         ) {
-                            ItineraryDetailRoute(
-                                onBack = { navController.popBackStack() }
-                            )
+                            composable("chat") {
+                                ChatRoute(
+                                    onOpenItinerary = { id ->
+                                        navController.navigate(itineraryRoute(id))
+                                    },
+                                    onOpenSaved = {
+                                        navController.navigate(SAVED_ROUTE)
+                                    }
+                                )
+                            }
+                            composable(SAVED_ROUTE) {
+                                SavedRoute(
+                                    onBack = { navController.popBackStack() },
+                                    onOpenItinerary = { id ->
+                                        navController.navigate(itineraryRoute(id))
+                                    }
+                                )
+                            }
+                            composable(
+                                route = ITINERARY_ROUTE_PATTERN,
+                                arguments = listOf(
+                                    navArgument(ITINERARY_ARG_ID) { type = NavType.StringType }
+                                )
+                            ) {
+                                ItineraryDetailRoute(
+                                    onBack = { navController.popBackStack() }
+                                )
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
