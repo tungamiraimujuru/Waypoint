@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.coroutines.android)
+    lintChecks(libs.compose.lint.checks)
+    implementation(libs.kotlinx.collections.immutable)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)

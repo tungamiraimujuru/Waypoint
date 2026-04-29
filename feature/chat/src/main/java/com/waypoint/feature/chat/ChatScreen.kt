@@ -115,8 +115,8 @@ fun ChatRoute(
 internal fun ChatScreen(
     state: ChatUiState,
     onIntent: (ChatIntent) -> Unit,
-    onOpenSaved: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onOpenSaved: () -> Unit = {}
 ) {
     val listState = rememberLazyListState()
 
@@ -255,7 +255,7 @@ private fun MessageRow(message: ChatMessage) {
 }
 
 @Composable
-private fun UserMessage(modifier: Modifier = Modifier, message: ChatMessage) {
+private fun UserMessage(message: ChatMessage, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End

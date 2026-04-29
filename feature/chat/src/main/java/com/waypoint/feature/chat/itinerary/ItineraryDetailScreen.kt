@@ -15,13 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,59 +41,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
-import com.waypoint.core.data.ItineraryRepository
 import com.waypoint.core.domain.model.Activity
 import com.waypoint.core.domain.model.Day
 import com.waypoint.core.domain.model.Itinerary
-import com.waypoint.core.ui.theme.WayPointTheme
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-
-// ─── route + args ──────────────────────────────────────────────
+import com.waypoint.feature.chat.viewmodel.ItineraryDetailViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 const val ITINERARY_ROUTE_PATTERN = "itinerary/{id}"
 const val ITINERARY_ARG_ID = "id"
 fun itineraryRoute(id: String) = "itinerary/$id"
-
-// ─── ViewModel ─────────────────────────────────────────────────
-
-@HiltViewModel
-class ItineraryDetailViewModel @Inject constructor(
-    private val repository: ItineraryRepository,
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
-
-    private val _state = MutableStateFlow<ItineraryDetailState>(ItineraryDetailState.Loading)
-    val state: StateFlow<ItineraryDetailState> = _state.asStateFlow()
-
-    init {
-        val id: String = savedStateHandle[ITINERARY_ARG_ID] ?: error("Missing $ITINERARY_ARG_ID")
-        viewModelScope.launch {
-            val itinerary = repository.get(id)
-            _state.value = if (itinerary != null) {
-                ItineraryDetailState.Ready(itinerary)
-            } else {
-                ItineraryDetailState.NotFound
-            }
-        }
-    }
-}
-
-sealed interface ItineraryDetailState {
-    data object Loading : ItineraryDetailState
-    data object NotFound : ItineraryDetailState
-    data class Ready(val itinerary: Itinerary) : ItineraryDetailState
-}
-
-// ─── route entry point ─────────────────────────────────────────
 
 @Composable
 fun ItineraryDetailRoute(
@@ -177,7 +133,7 @@ private fun ItineraryDetailScreen(
             item { ItineraryHeader(itinerary = itinerary) }
             item { ItinerarySummaryChip(itinerary = itinerary) }
             item { Spacer(Modifier.height(4.dp)) }
-            item { TimelineColumn(days = itinerary.days) }
+            item { TimelineColumn(days = itinerary.days.toImmutableList()) }
         }
     }
 }
@@ -298,7 +254,7 @@ private fun ItinerarySummaryChip(itinerary: Itinerary) {
  * card-shaped surface for legibility, since this is the long-form view.
  */
 @Composable
-private fun TimelineColumn(days: List<Day>) {
+private fun TimelineColumn(days: ImmutableList<Day>) {
     val spineColor = MaterialTheme.colorScheme.primary
 
     Box(
