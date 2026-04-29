@@ -44,52 +44,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
-import com.waypoint.core.data.ItineraryRepository
 import com.waypoint.core.domain.model.Activity
 import com.waypoint.core.domain.model.Day
 import com.waypoint.core.domain.model.Itinerary
 import com.waypoint.core.ui.theme.WayPointTheme
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
+import com.waypoint.feature.chat.viewmodel.SavedViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.Instant
-import javax.inject.Inject
 
 const val SAVED_ROUTE = "saved"
-
-// ─── ViewModel ─────────────────────────────────────────────────
-
-@HiltViewModel
-class SavedViewModel @Inject constructor(
-    repository: ItineraryRepository
-) : ViewModel() {
-
-    val state: StateFlow<SavedState> = flow {
-        repository.observeAll().collect { itineraries ->
-            emit(
-                if (itineraries.isEmpty()) SavedState.Empty
-                else SavedState.Loaded(itineraries)
-            )
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = SavedState.Loading
-    )
-}
-
-sealed interface SavedState {
-    data object Loading : SavedState
-    data object Empty : SavedState
-    data class Loaded(val itineraries: List<Itinerary>) : SavedState
-}
-
-// ─── Route ─────────────────────────────────────────────────────
 
 @Composable
 fun SavedRoute(
@@ -104,8 +69,6 @@ fun SavedRoute(
         onOpenItinerary = onOpenItinerary
     )
 }
-
-// ─── Screen ────────────────────────────────────────────────────
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -166,7 +129,7 @@ private fun SavedScreen(
 
                 SavedState.Empty -> EmptyState()
                 is SavedState.Loaded -> ItineraryList(
-                    itineraries = state.itineraries,
+                    itineraries = state.itineraries.toImmutableList(),
                     onOpenItinerary = onOpenItinerary
                 )
             }
@@ -208,7 +171,7 @@ private fun EmptyState() {
 
 @Composable
 private fun ItineraryList(
-    itineraries: List<Itinerary>,
+    itineraries: ImmutableList<Itinerary>,
     onOpenItinerary: (String) -> Unit
 ) {
     LazyColumn(
@@ -339,9 +302,6 @@ private fun MetaChip(text: String) {
         )
     }
 }
-
-// ─── previews ──────────────────────────────────────────────────
-
 
 @Preview(showBackground = true, backgroundColor = 0xFF0E0F11)
 @Composable
