@@ -57,27 +57,18 @@ import kotlinx.datetime.Instant
 const val SAVED_ROUTE = "saved"
 
 @Composable
-fun SavedRoute(
-    onBack: () -> Unit,
-    onOpenItinerary: (String) -> Unit,
-    viewModel: SavedViewModel = hiltViewModel()
-) {
+fun SavedRoute(onBack: () -> Unit, onOpenItinerary: (String) -> Unit, viewModel: SavedViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     SavedScreen(
         state = state,
         onBack = onBack,
-        onOpenItinerary = onOpenItinerary
+        onOpenItinerary = onOpenItinerary,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SavedScreen(
-    state: SavedState,
-    onBack: () -> Unit,
-    onOpenItinerary: (String) -> Unit
-) {
-
+private fun SavedScreen(state: SavedState, onBack: () -> Unit, onOpenItinerary: (String) -> Unit) {
     val borderColor = Color.Gray.copy(alpha = 0.45f)
 
     Scaffold(
@@ -91,7 +82,7 @@ private fun SavedScreen(
                         color = borderColor,
                         start = Offset(0f, size.height),
                         end = Offset(size.width, size.height),
-                        strokeWidth = strokeWidth
+                        strokeWidth = strokeWidth,
                     )
                 },
                 title = {
@@ -100,7 +91,7 @@ private fun SavedScreen(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
-                        letterSpacing = 3.sp
+                        letterSpacing = 3.sp,
                     )
                 },
                 navigationIcon = {
@@ -108,29 +99,30 @@ private fun SavedScreen(
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                    containerColor = MaterialTheme.colorScheme.background,
+                ),
             )
-        }
+        },
     ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding),
         ) {
             when (state) {
-                SavedState.Loading -> { /* trivially fast — no spinner needed */
+                SavedState.Loading -> {
+                    /* trivially fast — no spinner needed */
                 }
 
                 SavedState.Empty -> EmptyState()
                 is SavedState.Loaded -> ItineraryList(
                     itineraries = state.itineraries.toImmutableList(),
-                    onOpenItinerary = onOpenItinerary
+                    onOpenItinerary = onOpenItinerary,
                 )
             }
         }
@@ -143,13 +135,13 @@ private fun EmptyState() {
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 80.dp, start = 32.dp, end = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = "SAVED",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,
-            letterSpacing = 1.5.sp
+            letterSpacing = 1.5.sp,
         )
         Spacer(Modifier.height(12.dp))
         Text(
@@ -157,27 +149,24 @@ private fun EmptyState() {
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(8.dp))
         Text(
             text = "Itineraries you generate will show up here.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
 
 @Composable
-private fun ItineraryList(
-    itineraries: ImmutableList<Itinerary>,
-    onOpenItinerary: (String) -> Unit
-) {
+private fun ItineraryList(itineraries: ImmutableList<Itinerary>, onOpenItinerary: (String) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         item {
             Column {
@@ -185,20 +174,20 @@ private fun ItineraryList(
                     text = "SAVED",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
-                    letterSpacing = 1.5.sp
+                    letterSpacing = 1.5.sp,
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
                     text = "Your itineraries",
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.onBackground,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
                     text = "${itineraries.size} ${if (itineraries.size == 1) "trip" else "trips"} planned",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.height(12.dp))
             }
@@ -207,17 +196,14 @@ private fun ItineraryList(
         items(itineraries, key = { it.id }) { itinerary ->
             ItineraryRow(
                 itinerary = itinerary,
-                onClick = { onOpenItinerary(itinerary.id) }
+                onClick = { onOpenItinerary(itinerary.id) },
             )
         }
     }
 }
 
 @Composable
-private fun ItineraryRow(
-    itinerary: Itinerary,
-    onClick: () -> Unit
-) {
+private fun ItineraryRow(itinerary: Itinerary, onClick: () -> Unit) {
     val activityCount = itinerary.days.sumOf { it.activities.size }
     Surface(
         shape = RoundedCornerShape(14.dp),
@@ -227,14 +213,14 @@ private fun ItineraryRow(
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.outline,
-                shape = RoundedCornerShape(14.dp)
+                shape = RoundedCornerShape(14.dp),
             )
-            .clickable(onClick = onClick)
+            .clickable(onClick = onClick),
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             // Amber circle with location pin
             Box(
@@ -242,15 +228,15 @@ private fun ItineraryRow(
                     .size(40.dp)
                     .background(
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                        shape = CircleShape
+                        shape = CircleShape,
                     ),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(20.dp),
                 )
             }
 
@@ -260,18 +246,18 @@ private fun ItineraryRow(
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.SemiBold,
-                    maxLines = 1
+                    maxLines = 1,
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = itinerary.destination,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1
+                    maxLines = 1,
                 )
                 Spacer(Modifier.height(6.dp))
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     MetaChip(text = "${itinerary.days.size} days")
                     MetaChip(text = "$activityCount stops")
@@ -281,7 +267,7 @@ private fun ItineraryRow(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
@@ -291,14 +277,14 @@ private fun ItineraryRow(
 private fun MetaChip(text: String) {
     Surface(
         shape = RoundedCornerShape(6.dp),
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface,
     ) {
         Text(
             text = text,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
             style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 0.5.sp),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
     }
 }
@@ -316,21 +302,21 @@ private fun SavedScreenLoadedPreview() {
                         destination = "Cape Town, South Africa",
                         days = listOf(
                             Day(1, "Arrival", List(5) { sampleActivity(it) }),
-                            Day(2, "Cape Point", List(6) { sampleActivity(it) })
+                            Day(2, "Cape Point", List(6) { sampleActivity(it) }),
                         ),
-                        createdAt = Instant.fromEpochSeconds(0)
+                        createdAt = Instant.fromEpochSeconds(0),
                     ),
                     Itinerary(
                         id = "2",
                         title = "Weekend in Lisbon",
                         destination = "Lisbon, Portugal",
                         days = listOf(Day(1, "Alfama", List(4) { sampleActivity(it) })),
-                        createdAt = Instant.fromEpochSeconds(0)
-                    )
-                )
+                        createdAt = Instant.fromEpochSeconds(0),
+                    ),
+                ),
             ),
             onBack = {},
-            onOpenItinerary = {}
+            onOpenItinerary = {},
         )
     }
 }
@@ -349,5 +335,5 @@ private fun sampleActivity(seed: Int) = Activity(
     description = "",
     locationName = "Place $seed",
     lat = null,
-    lng = null
+    lng = null,
 )

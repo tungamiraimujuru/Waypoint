@@ -30,46 +30,46 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WayPointTheme {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background,
+                ) {
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = "chat",
                     ) {
-                        val navController = rememberNavController()
-                        NavHost(
-                            navController = navController,
-                            startDestination = "chat"
+                        composable("chat") {
+                            ChatRoute(
+                                onOpenItinerary = { id ->
+                                    navController.navigate(itineraryRoute(id))
+                                },
+                                onOpenSaved = {
+                                    navController.navigate(SAVED_ROUTE)
+                                },
+                            )
+                        }
+                        composable(SAVED_ROUTE) {
+                            SavedRoute(
+                                onBack = { navController.popBackStack() },
+                                onOpenItinerary = { id ->
+                                    navController.navigate(itineraryRoute(id))
+                                },
+                            )
+                        }
+                        composable(
+                            route = ITINERARY_ROUTE_PATTERN,
+                            arguments = listOf(
+                                navArgument(ITINERARY_ARG_ID) { type = NavType.StringType },
+                            ),
                         ) {
-                            composable("chat") {
-                                ChatRoute(
-                                    onOpenItinerary = { id ->
-                                        navController.navigate(itineraryRoute(id))
-                                    },
-                                    onOpenSaved = {
-                                        navController.navigate(SAVED_ROUTE)
-                                    }
-                                )
-                            }
-                            composable(SAVED_ROUTE) {
-                                SavedRoute(
-                                    onBack = { navController.popBackStack() },
-                                    onOpenItinerary = { id ->
-                                        navController.navigate(itineraryRoute(id))
-                                    }
-                                )
-                            }
-                            composable(
-                                route = ITINERARY_ROUTE_PATTERN,
-                                arguments = listOf(
-                                    navArgument(ITINERARY_ARG_ID) { type = NavType.StringType }
-                                )
-                            ) {
-                                ItineraryDetailRoute(
-                                    onBack = { navController.popBackStack() }
-                                )
-                            }
+                            ItineraryDetailRoute(
+                                onBack = { navController.popBackStack() },
+                            )
                         }
                     }
                 }
             }
         }
     }
+}

@@ -18,14 +18,11 @@ internal data class AnthropicRequest(
     @SerialName("max_tokens") val maxTokens: Int,
     val stream: Boolean,
     val system: String? = null,
-    val messages: List<AnthropicMessage>
+    val messages: List<AnthropicMessage>,
 )
 
 @Serializable
-internal data class AnthropicMessage(
-    val role: String,
-    val content: String
-)
+internal data class AnthropicMessage(val role: String, val content: String)
 
 internal fun List<ChatMessage>.toAnthropicRequest(): AnthropicRequest {
     val system = firstOrNull { it.role == ChatMessage.Role.System }?.content
@@ -36,7 +33,7 @@ internal fun List<ChatMessage>.toAnthropicRequest(): AnthropicRequest {
                 ChatMessage.Role.Assistant -> "assistant"
                 ChatMessage.Role.System -> error("System role already extracted")
             },
-            content = it.content
+            content = it.content,
         )
     }
     return AnthropicRequest(
@@ -44,6 +41,6 @@ internal fun List<ChatMessage>.toAnthropicRequest(): AnthropicRequest {
         maxTokens = AnthropicApi.MAX_TOKENS,
         stream = true,
         system = system?.takeIf { it.isNotBlank() },
-        messages = turns
+        messages = turns,
     )
 }

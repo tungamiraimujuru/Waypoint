@@ -16,61 +16,59 @@ import androidx.compose.ui.graphics.Color
  */
 private val WayPointDarkColors = darkColorScheme(
     // Primary — the warm amber that defines the brand
-    primary             = Amber500,
-    onPrimary           = Surface950,
-    primaryContainer    = Amber900,
-    onPrimaryContainer  = Amber200,
+    primary = Amber500,
+    onPrimary = Surface950,
+    primaryContainer = Amber900,
+    onPrimaryContainer = Amber200,
 
     // Secondary — muted gold companion
-    secondary           = Gold500,
-    onSecondary         = Surface950,
-    secondaryContainer  = Gold900,
+    secondary = Gold500,
+    onSecondary = Surface950,
+    secondaryContainer = Gold900,
     onSecondaryContainer = Gold200,
 
     // Tertiary — cool sky blue, the spice
-    tertiary            = Sky500,
-    onTertiary          = Surface950,
-    tertiaryContainer   = Surface800,
+    tertiary = Sky500,
+    onTertiary = Surface950,
+    tertiaryContainer = Surface800,
     onTertiaryContainer = Sky200,
 
     // Backgrounds
-    background          = Surface950,
-    onBackground        = Surface100,
+    background = Surface950,
+    onBackground = Surface100,
 
     // Surfaces (cards, sheets, bars)
-    surface             = Surface950,
-    onSurface           = Surface100,
-    surfaceVariant      = Surface800,
-    onSurfaceVariant    = Surface300,
+    surface = Surface950,
+    onSurface = Surface100,
+    surfaceVariant = Surface800,
+    onSurfaceVariant = Surface300,
 
     // Borders, dividers, hairlines
-    outline             = Surface700,
-    outlineVariant      = Surface800,
+    outline = Surface700,
+    outlineVariant = Surface800,
 
     // Errors
-    error               = ErrorRed,
-    onError             = Surface50,
-    errorContainer      = ErrorRedDark,
-    onErrorContainer    = Color(0xFFFFD3CF),
+    error = ErrorRed,
+    onError = Surface50,
+    errorContainer = ErrorRedDark,
+    onErrorContainer = Color(0xFFFFD3CF),
 
     // Inverse (rarely used in dark themes; kept for completeness)
-    inverseSurface      = Surface100,
-    inverseOnSurface    = Surface950,
-    inversePrimary      = Amber700,
+    inverseSurface = Surface100,
+    inverseOnSurface = Surface950,
+    inversePrimary = Amber700,
 
     // Scrims
-    scrim               = Color(0xCC000000),
+    scrim = Color(0xCC000000),
 )
 
 @Composable
-fun WayPointTheme(
-    content: @Composable () -> Unit
-) {
+fun WayPointTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = WayPointDarkColors,
         typography = WayPointTypography,
         shapes = WayPointShapes,
-        content = content
+        content = content,
     )
 }
 

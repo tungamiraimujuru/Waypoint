@@ -16,9 +16,7 @@ internal abstract class DataBindingsModule {
 
     @Binds
     @Singleton
-    abstract fun bindItineraryRepository(
-        impl: RoomItineraryRepository
-    ): ItineraryRepository
+    abstract fun bindItineraryRepository(impl: RoomItineraryRepository): ItineraryRepository
 }
 
 @Module

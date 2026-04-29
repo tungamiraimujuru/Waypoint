@@ -12,7 +12,7 @@ class PromptBuilderTest {
     fun `builds two messages - system first, user second`() {
         val messages = builder.buildItineraryMessages(
             userPrompt = "4 days in Cape Town",
-            context = TripContext.Empty
+            context = TripContext.Empty,
         )
 
         assertThat(messages).hasSize(2)
@@ -33,7 +33,7 @@ class PromptBuilderTest {
     fun `user block embeds the prompt`() {
         val messages = builder.buildItineraryMessages(
             userPrompt = "4 days in Cape Town, hiking and food",
-            context = TripContext.Empty
+            context = TripContext.Empty,
         )
         val user = messages.first { it.role == ChatMessage.Role.User }
 
@@ -46,7 +46,7 @@ class PromptBuilderTest {
         val context = TripContext(
             preferences = listOf("hiking", "food"),
             budget = TripContext.Budget.Mid,
-            previousTrips = emptyList()
+            previousTrips = emptyList(),
         )
 
         val messages = builder.buildItineraryMessages("any", context)

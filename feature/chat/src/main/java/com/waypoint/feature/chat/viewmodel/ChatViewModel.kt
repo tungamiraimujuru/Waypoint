@@ -19,7 +19,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,11 +30,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val orchestrator: AiOrchestrator,
-    private val itineraryRepository: ItineraryRepository
+    private val itineraryRepository: ItineraryRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ChatUiState())
-    val state: StateFlow<ChatUiState> = _state.asStateFlow()
+    val state = _state.asStateFlow()
 
     private val _nav = Channel<ChatNavEvent>(Channel.BUFFERED)
     val navEvents: Flow<ChatNavEvent> = _nav.receiveAsFlow()
@@ -72,14 +71,14 @@ class ChatViewModel @Inject constructor(
         val userMsg = ChatMessage(
             id = UUID.randomUUID().toString(),
             role = ChatMessage.Role.User,
-            text = prompt
+            text = prompt,
         )
         val assistantId = UUID.randomUUID().toString()
         val assistantMsg = ChatMessage(
             id = assistantId,
             role = ChatMessage.Role.Assistant,
             text = "",
-            isStreaming = true
+            isStreaming = true,
         )
 
         _state.update {
@@ -89,7 +88,7 @@ class ChatViewModel @Inject constructor(
                 stream = ChatUiState.StreamState.Connecting,
                 itineraryPreview = ItineraryPreview(),
                 transientError = null,
-                savedItineraryId = null
+                savedItineraryId = null,
             )
         }
 
@@ -98,8 +97,8 @@ class ChatViewModel @Inject constructor(
             AiRequest(
                 userPrompt = prompt,
                 context = TripContext.Empty,
-                conversationId = ConversationId.Default
-            )
+                conversationId = ConversationId.Default,
+            ),
         )
             .onEach { event ->
                 _state.update { current ->
@@ -120,7 +119,7 @@ class ChatViewModel @Inject constructor(
                 messages = it.messages.map { msg ->
                     if (msg.isStreaming) msg.copy(isStreaming = false) else msg
                 },
-                stream = ChatUiState.StreamState.Idle
+                stream = ChatUiState.StreamState.Idle,
             )
         }
     }

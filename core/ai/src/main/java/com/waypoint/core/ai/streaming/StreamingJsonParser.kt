@@ -69,7 +69,7 @@ class StreamingJsonParser @Inject constructor() {
         val events = mutableListOf<ParseEvent>()
 
         if (state == State.WaitingForRoot) {
-            if (!enterRoot()) return events  // need more data
+            if (!enterRoot()) return events // need more data
         }
 
         if (state == State.Complete) return events
@@ -90,7 +90,7 @@ class StreamingJsonParser @Inject constructor() {
             completedDays += Day(
                 dayNumber = currentDayNumber!!,
                 summary = currentDaySummary,
-                activities = currentDayActivities.toList()
+                activities = currentDayActivities.toList(),
             )
         }
 
@@ -101,7 +101,7 @@ class StreamingJsonParser @Inject constructor() {
             title = title,
             destination = destination,
             days = completedDays.toList(),
-            createdAt = Clock.System.now()
+            createdAt = Clock.System.now(),
         )
     }
 
@@ -121,10 +121,10 @@ class StreamingJsonParser @Inject constructor() {
             val newlineIdx = buffer.indexOf('\n', firstNonWs + 3)
             if (newlineIdx < 0) return false
             buffer.delete(0, newlineIdx + 1)
-            return enterRoot()  // re-attempt with fence stripped
+            return enterRoot() // re-attempt with fence stripped
         }
 
-        if (buffer[firstNonWs] != '{') return false  // shouldn't happen but defensive
+        if (buffer[firstNonWs] != '{') return false // shouldn't happen but defensive
 
         // Consume the opening `{`. We are now logically inside the root.
         buffer.delete(0, firstNonWs + 1)
@@ -183,7 +183,7 @@ class StreamingJsonParser @Inject constructor() {
             completedDays += Day(
                 dayNumber = prev,
                 summary = currentDaySummary,
-                activities = currentDayActivities.toList()
+                activities = currentDayActivities.toList(),
             )
             currentDayActivities.clear()
         }

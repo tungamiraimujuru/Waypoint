@@ -17,22 +17,13 @@ import com.waypoint.core.domain.model.Activity
 sealed interface ParseEvent {
 
     /** Title and destination have been parsed. Always emitted before any DayStarted. */
-    data class TitleResolved(
-        val title: String,
-        val destination: String
-    ) : ParseEvent
+    data class TitleResolved(val title: String, val destination: String) : ParseEvent
 
     /** A new day's header is complete. Activities for it will follow. */
-    data class DayStarted(
-        val dayNumber: Int,
-        val summary: String
-    ) : ParseEvent
+    data class DayStarted(val dayNumber: Int, val summary: String) : ParseEvent
 
     /** A complete activity has been parsed. Belongs to [dayNumber]. */
-    data class ActivityEmitted(
-        val dayNumber: Int,
-        val activity: Activity
-    ) : ParseEvent
+    data class ActivityEmitted(val dayNumber: Int, val activity: Activity) : ParseEvent
 
     /** Terminal — the JSON root object closed cleanly. */
     data object ItineraryComplete : ParseEvent

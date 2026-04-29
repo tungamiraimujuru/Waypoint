@@ -29,7 +29,7 @@ class ItineraryTest {
         val updated = original.copy(days = original.days + sampleDay(dayNumber = 2))
 
         assertThat(updated.days).hasSize(2)
-        assertThat(original.days).hasSize(1)   // unchanged
+        assertThat(original.days).hasSize(1) // unchanged
         assertThat(updated.id).isEqualTo(original.id)
     }
 
@@ -45,22 +45,19 @@ class ItineraryTest {
 
     // --- helpers ---
 
-    private fun sampleActivity(
-        lat: Double? = -33.96,
-        lng: Double? = 18.41
-    ) = Activity(
+    private fun sampleActivity(lat: Double? = -33.96, lng: Double? = 18.41) = Activity(
         time = "09:00",
         title = "Table Mountain hike",
         description = "Platteklip Gorge trail",
         locationName = "Platteklip Gorge",
         lat = lat,
-        lng = lng
+        lng = lng,
     )
 
     private fun sampleDay(dayNumber: Int = 1) = Day(
         dayNumber = dayNumber,
         summary = "Arrival & V&A Waterfront",
-        activities = listOf(sampleActivity())
+        activities = listOf(sampleActivity()),
     )
 
     private fun sampleItinerary() = Itinerary(
@@ -68,7 +65,7 @@ class ItineraryTest {
         title = "4 days in Cape Town",
         destination = "Cape Town, South Africa",
         days = listOf(sampleDay()),
-        createdAt = Instant.fromEpochSeconds(0)
+        createdAt = Instant.fromEpochSeconds(0),
     )
 }
 

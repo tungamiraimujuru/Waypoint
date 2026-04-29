@@ -136,6 +136,6 @@ internal val WayPointTypography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 11.sp,
         lineHeight = 14.sp,
-        letterSpacing = 1.2.sp,    // for ITINERARY-style all-caps labels
+        letterSpacing = 1.2.sp, // for ITINERARY-style all-caps labels
     ),
 )

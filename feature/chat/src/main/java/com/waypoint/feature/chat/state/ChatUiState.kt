@@ -17,7 +17,7 @@ data class ChatUiState(
     val stream: StreamState = StreamState.Idle,
     val itineraryPreview: ItineraryPreview? = null,
     val transientError: AiError? = null,
-    val savedItineraryId: String? = null
+    val savedItineraryId: String? = null,
 ) {
     val canSend: Boolean get() = draft.isNotBlank() && stream is StreamState.Idle
 
@@ -28,12 +28,7 @@ data class ChatUiState(
     }
 }
 
-data class ChatMessage(
-    val id: String,
-    val role: Role,
-    val text: String,
-    val isStreaming: Boolean = false
-) {
+data class ChatMessage(val id: String, val role: Role, val text: String, val isStreaming: Boolean = false) {
     enum class Role { User, Assistant }
 }
 
@@ -49,7 +44,7 @@ data class ItineraryPreview(
     val title: String? = null,
     val destination: String? = null,
     val days: List<Day> = emptyList(),
-    val isComplete: Boolean = false
+    val isComplete: Boolean = false,
 ) {
     val activityCount: Int get() = days.sumOf { it.activities.size }
     val hasContent: Boolean get() = title != null || days.isNotEmpty()

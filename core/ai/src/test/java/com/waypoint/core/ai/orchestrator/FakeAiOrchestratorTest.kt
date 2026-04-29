@@ -22,14 +22,14 @@ class FakeAiOrchestratorTest {
                 AiStreamEvent.Token("{"),
                 AiStreamEvent.Token("\"title\":\"Cape Town\""),
                 AiStreamEvent.Structured(
-                    ParseEvent.TitleResolved("Cape Town", "Cape Town, South Africa")
+                    ParseEvent.TitleResolved("Cape Town", "Cape Town, South Africa"),
                 ),
                 AiStreamEvent.Structured(
-                    ParseEvent.DayStarted(1, "Arrival")
+                    ParseEvent.DayStarted(1, "Arrival"),
                 ),
-                AiStreamEvent.Done(sampleItinerary())
+                AiStreamEvent.Done(sampleItinerary()),
             ),
-            interTokenDelayMillis = 0L
+            interTokenDelayMillis = 0L,
         )
 
         orchestrator.streamItinerary(sampleRequest()).test {
@@ -47,9 +47,9 @@ class FakeAiOrchestratorTest {
         val orchestrator = FakeAiOrchestrator(
             script = listOf(
                 AiStreamEvent.Token("Hello"),
-                AiStreamEvent.Failed(AiError.NoNetwork)
+                AiStreamEvent.Failed(AiError.NoNetwork),
             ),
-            interTokenDelayMillis = 0L
+            interTokenDelayMillis = 0L,
         )
 
         orchestrator.streamItinerary(sampleRequest()).test {
@@ -65,7 +65,7 @@ class FakeAiOrchestratorTest {
     private fun sampleRequest() = AiRequest(
         userPrompt = "test",
         context = TripContext.Empty,
-        conversationId = ConversationId.Default
+        conversationId = ConversationId.Default,
     )
 
     private fun sampleItinerary() = Itinerary(
@@ -73,6 +73,6 @@ class FakeAiOrchestratorTest {
         title = "Test",
         destination = "Test",
         days = emptyList(),
-        createdAt = Instant.fromEpochSeconds(0)
+        createdAt = Instant.fromEpochSeconds(0),
     )
 }

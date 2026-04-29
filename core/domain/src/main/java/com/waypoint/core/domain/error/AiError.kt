@@ -13,10 +13,7 @@ package com.waypoint.core.domain.error
  * exception machinery. We do NOT extend RuntimeException because we
  * always handle these — they are checked at the boundary, not crashes.
  */
-sealed class AiError(
-    message: String,
-    cause: Throwable? = null
-) : Throwable(message, cause) {
+sealed class AiError(message: String, cause: Throwable? = null) : Throwable(message, cause) {
 
     /** User cancelled, navigated away, or otherwise aborted the stream. */
     data object Cancelled : AiError("Stream cancelled")
