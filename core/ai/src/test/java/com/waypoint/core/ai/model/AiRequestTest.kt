@@ -12,7 +12,7 @@ class AiRequestTest {
         val request = AiRequest(
             userPrompt = "4 days in Cape Town",
             context = TripContext.Empty,
-            conversationId = ConversationId.Default
+            conversationId = ConversationId.Default,
         )
 
         assertThat(request.userPrompt).isEqualTo("4 days in Cape Town")
@@ -24,7 +24,7 @@ class AiRequestTest {
         AiRequest(
             userPrompt = "",
             context = TripContext.Empty,
-            conversationId = ConversationId.Default
+            conversationId = ConversationId.Default,
         )
     }
 
@@ -33,7 +33,7 @@ class AiRequestTest {
         AiRequest(
             userPrompt = "   \t\n",
             context = TripContext.Empty,
-            conversationId = ConversationId.Default
+            conversationId = ConversationId.Default,
         )
     }
 }

@@ -17,12 +17,11 @@ internal object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): WayPointDatabase =
-        Room.databaseBuilder(
-            context = context.applicationContext,
-            klass = WayPointDatabase::class.java,
-            name = WayPointDatabase.DB_NAME
-        ).build()
+    fun provideDatabase(@ApplicationContext context: Context): WayPointDatabase = Room.databaseBuilder(
+        context = context.applicationContext,
+        klass = WayPointDatabase::class.java,
+        name = WayPointDatabase.DB_NAME,
+    ).build()
 
     @Provides
     fun provideItineraryDao(db: WayPointDatabase): ItineraryDao = db.itineraryDao()

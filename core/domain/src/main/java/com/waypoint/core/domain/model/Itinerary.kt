@@ -19,15 +19,11 @@ data class Itinerary(
     val title: String,
     val destination: String,
     val days: List<Day>,
-    val createdAt: Instant
+    val createdAt: Instant,
 )
 
 @Serializable
-data class Day(
-    val dayNumber: Int,
-    val summary: String,
-    val activities: List<Activity>
-)
+data class Day(val dayNumber: Int, val summary: String, val activities: List<Activity>)
 
 @Serializable
 data class Activity(
@@ -37,7 +33,7 @@ data class Activity(
     val description: String,
     val locationName: String,
     val lat: Double?,
-    val lng: Double?
+    val lng: Double?,
 ) {
     /** True when we have enough info to drop a map pin. */
     val hasCoordinates: Boolean get() = lat != null && lng != null

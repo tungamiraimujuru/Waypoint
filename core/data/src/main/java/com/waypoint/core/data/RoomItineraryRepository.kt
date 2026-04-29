@@ -10,10 +10,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class RoomItineraryRepository @Inject constructor(
-    private val dao: ItineraryDao,
-    json: Json
-) : ItineraryRepository {
+internal class RoomItineraryRepository @Inject constructor(private val dao: ItineraryDao, json: Json) :
+    ItineraryRepository {
 
     private val mapper = ItineraryMapper(json)
 
@@ -21,8 +19,7 @@ internal class RoomItineraryRepository @Inject constructor(
         dao.upsert(mapper.toEntity(itinerary))
     }
 
-    override suspend fun get(id: String): Itinerary? =
-        dao.getById(id)?.let(mapper::toDomain)
+    override suspend fun get(id: String): Itinerary? = dao.getById(id)?.let(mapper::toDomain)
 
     override fun observeAll(): Flow<List<Itinerary>> =
         dao.observeAll().map { entities -> entities.map(mapper::toDomain) }

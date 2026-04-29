@@ -7,11 +7,7 @@ package com.waypoint.core.domain.model
  * actually used in prompt templates. Anything unused here would just inflate
  * the context window and cost tokens.
  */
-data class TripContext(
-    val preferences: List<String>,
-    val budget: Budget,
-    val previousTrips: List<String>
-) {
+data class TripContext(val preferences: List<String>, val budget: Budget, val previousTrips: List<String>) {
     enum class Budget { Low, Mid, High }
 
     companion object {
@@ -19,7 +15,7 @@ data class TripContext(
         val Empty = TripContext(
             preferences = emptyList(),
             budget = Budget.Mid,
-            previousTrips = emptyList()
+            previousTrips = emptyList(),
         )
     }
 }

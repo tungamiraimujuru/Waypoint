@@ -36,7 +36,7 @@ import javax.inject.Singleton
 internal class RealAiOrchestrator @Inject constructor(
     private val promptBuilder: PromptBuilder,
     private val sseClient: SseClient,
-    private val parser: StreamingJsonParser
+    private val parser: StreamingJsonParser,
 ) : AiOrchestrator {
 
     override fun streamItinerary(request: AiRequest): Flow<AiStreamEvent> = flow {
@@ -44,7 +44,7 @@ internal class RealAiOrchestrator @Inject constructor(
 
         val messages = promptBuilder.buildItineraryMessages(
             userPrompt = request.userPrompt,
-            context = request.context
+            context = request.context,
         )
 
         sseClient.streamCompletion(messages).collect { delta ->
@@ -61,7 +61,7 @@ internal class RealAiOrchestrator @Inject constructor(
         // Stream ended cleanly. Try to finalise an itinerary.
         val itinerary = parser.finalize()
             ?: throw AiError.Parse(
-                snippet = "Stream completed but no valid itinerary could be parsed"
+                snippet = "Stream completed but no valid itinerary could be parsed",
             )
         emit(AiStreamEvent.Done(itinerary))
     }

@@ -8,7 +8,7 @@ import com.waypoint.core.database.entity.ItineraryEntity
 @Database(
     entities = [ItineraryEntity::class],
     version = 1,
-    exportSchema = false   // turn on for production projects; off for v1
+    exportSchema = false, // turn on for production projects; off for v1
 )
 abstract class WayPointDatabase : RoomDatabase() {
     abstract fun itineraryDao(): ItineraryDao

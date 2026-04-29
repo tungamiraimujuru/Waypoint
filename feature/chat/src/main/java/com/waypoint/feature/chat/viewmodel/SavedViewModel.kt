@@ -12,20 +12,21 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class SavedViewModel @Inject constructor(
-    repository: ItineraryRepository
-) : ViewModel() {
+class SavedViewModel @Inject constructor(repository: ItineraryRepository) : ViewModel() {
 
     val state: StateFlow<SavedState> = flow {
         repository.observeAll().collect { itineraries ->
             emit(
-                if (itineraries.isEmpty()) SavedState.Empty
-                else SavedState.Loaded(itineraries)
+                if (itineraries.isEmpty()) {
+                    SavedState.Empty
+                } else {
+                    SavedState.Loaded(itineraries)
+                },
             )
         }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = SavedState.Loading
+        initialValue = SavedState.Loading,
     )
 }

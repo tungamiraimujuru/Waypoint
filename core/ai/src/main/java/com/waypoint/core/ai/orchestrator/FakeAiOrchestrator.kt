@@ -24,7 +24,7 @@ import javax.inject.Inject
  */
 class FakeAiOrchestrator @Inject constructor(
     private val script: List<AiStreamEvent>,
-    private val interTokenDelayMillis: Long = 30L
+    private val interTokenDelayMillis: Long = 30L,
 ) : AiOrchestrator {
 
     override fun streamItinerary(request: AiRequest): Flow<AiStreamEvent> = flow {

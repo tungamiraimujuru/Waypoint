@@ -11,18 +11,18 @@ import io.ktor.client.plugins.sse.sse
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
-import io.ktor.http.ContentType
 import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Streams Anthropic SSE events as raw text deltas.
@@ -40,10 +40,7 @@ import kotlinx.serialization.json.jsonPrimitive
  *  - Retry (orchestrator does).
  */
 @Singleton
-internal class SseClient @Inject constructor(
-    private val httpClient: HttpClient,
-    private val json: Json
-) {
+internal class SseClient @Inject constructor(private val httpClient: HttpClient, private val json: Json) {
 
     /**
      * Cold flow of text deltas from Claude.
@@ -66,7 +63,7 @@ internal class SseClient @Inject constructor(
                     }
                     contentType(ContentType.Application.Json)
                     setBody(request)
-                }
+                },
             ) {
                 incoming.collect { event ->
                     val data = event.data ?: return@collect
@@ -109,7 +106,6 @@ private fun Throwable.toAiError(): AiError = when (this) {
     is java.net.UnknownHostException, is java.io.IOException -> AiError.NoNetwork
     else -> AiError.Unknown(this)
 }
-
 
 /**
  * Provides an HttpClient configured for Anthropic SSE.

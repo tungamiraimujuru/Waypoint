@@ -25,5 +25,5 @@ data class ItineraryEntity(
     val destination: String,
     val createdAtEpochMillis: Long,
     /** Full Itinerary as JSON. Source of truth for non-indexed fields. */
-    val payloadJson: String
+    val payloadJson: String,
 )

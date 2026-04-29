@@ -120,7 +120,9 @@ class StreamingJsonParserTest {
                         .jsonObject
                     if (event["type"]?.jsonPrimitive?.content == "content_block_delta") {
                         event["delta"]?.jsonObject?.get("text")?.jsonPrimitive?.content
-                    } else null
+                    } else {
+                        null
+                    }
                 }.getOrNull()
             }
             .toList()

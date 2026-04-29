@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ItineraryDetailViewModel @Inject constructor(
     private val repository: ItineraryRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ItineraryDetailState>(ItineraryDetailState.Loading)

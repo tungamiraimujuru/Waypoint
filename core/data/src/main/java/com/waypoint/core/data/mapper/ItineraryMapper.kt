@@ -11,9 +11,8 @@ internal class ItineraryMapper(private val json: Json) {
         title = itinerary.title,
         destination = itinerary.destination,
         createdAtEpochMillis = itinerary.createdAt.toEpochMilliseconds(),
-        payloadJson = json.encodeToString(Itinerary.serializer(), itinerary)
+        payloadJson = json.encodeToString(Itinerary.serializer(), itinerary),
     )
 
-    fun toDomain(entity: ItineraryEntity): Itinerary =
-        json.decodeFromString(Itinerary.serializer(), entity.payloadJson)
+    fun toDomain(entity: ItineraryEntity): Itinerary = json.decodeFromString(Itinerary.serializer(), entity.payloadJson)
 }

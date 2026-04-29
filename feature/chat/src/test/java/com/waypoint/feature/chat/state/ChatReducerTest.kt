@@ -17,10 +17,10 @@ class ChatReducerTest {
     private val baseState = ChatUiState(
         messages = listOf(
             ChatMessage("user-1", ChatMessage.Role.User, "4 days in Cape Town"),
-            ChatMessage(streamingId, ChatMessage.Role.Assistant, "", isStreaming = true)
+            ChatMessage(streamingId, ChatMessage.Role.Assistant, "", isStreaming = true),
         ),
         stream = ChatUiState.StreamState.Connecting,
-        itineraryPreview = ItineraryPreview()
+        itineraryPreview = ItineraryPreview(),
     )
 
     @Test
@@ -28,7 +28,7 @@ class ChatReducerTest {
         val result = reduceStreamEvent(
             baseState,
             AiStreamEvent.Token("Hello"),
-            streamingId
+            streamingId,
         )
 
         val streamingMsg = result.messages.first { it.id == streamingId }
@@ -48,7 +48,7 @@ class ChatReducerTest {
     @Test
     fun `TitleResolved structured event populates the preview title`() {
         val event = AiStreamEvent.Structured(
-            ParseEvent.TitleResolved("4 days in Cape Town", "Cape Town, SA")
+            ParseEvent.TitleResolved("4 days in Cape Town", "Cape Town, SA"),
         )
 
         val result = reduceStreamEvent(baseState, event, streamingId)
@@ -60,7 +60,7 @@ class ChatReducerTest {
     @Test
     fun `DayStarted appends an empty day to the preview`() {
         val event = AiStreamEvent.Structured(
-            ParseEvent.DayStarted(1, "Arrival & V&A Waterfront")
+            ParseEvent.DayStarted(1, "Arrival & V&A Waterfront"),
         )
 
         val result = reduceStreamEvent(baseState, event, streamingId)
@@ -76,17 +76,17 @@ class ChatReducerTest {
         val withDay = reduceStreamEvent(
             baseState,
             AiStreamEvent.Structured(ParseEvent.DayStarted(1, "Arrival")),
-            streamingId
+            streamingId,
         )
         val withActivity = reduceStreamEvent(
             withDay,
             AiStreamEvent.Structured(
                 ParseEvent.ActivityEmitted(
                     dayNumber = 1,
-                    activity = sampleActivity()
-                )
+                    activity = sampleActivity(),
+                ),
             ),
-            streamingId
+            streamingId,
         )
 
         val day = withActivity.itineraryPreview?.days?.first()!!
@@ -101,7 +101,7 @@ class ChatReducerTest {
             title = "Cape Town",
             destination = "Cape Town, SA",
             days = listOf(Day(1, "Arrival", listOf(sampleActivity()))),
-            createdAt = Instant.fromEpochSeconds(0)
+            createdAt = Instant.fromEpochSeconds(0),
         )
 
         val result = reduceStreamEvent(baseState, AiStreamEvent.Done(itinerary), streamingId)
@@ -118,7 +118,7 @@ class ChatReducerTest {
         val result = reduceStreamEvent(
             baseState,
             AiStreamEvent.Failed(AiError.NoNetwork),
-            streamingId
+            streamingId,
         )
 
         assertThat(result.transientError).isEqualTo(AiError.NoNetwork)
@@ -132,6 +132,6 @@ class ChatReducerTest {
         description = "Cable car",
         locationName = "Table Mountain",
         lat = -33.96,
-        lng = 18.41
+        lng = 18.41,
     )
 }
