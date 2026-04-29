@@ -13,7 +13,7 @@ indent_size = 4
 max_line_length = 120
 ktlint_code_style = android_studio
 ktlint_standard_function-naming = disabled
-
+ktlint_standard_backing-property-naming = disabled
 # Trailing commas (Compose-friendly)
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
@@ -25,6 +25,8 @@ ij_kotlin_packages_to_use_import_on_demand =
 # Class formatting
 ij_kotlin_keep_blank_lines_in_code = 1
 ij_kotlin_keep_blank_lines_in_declarations = 1
+
+
 
 # XML (Android resources)
 [*.xml]

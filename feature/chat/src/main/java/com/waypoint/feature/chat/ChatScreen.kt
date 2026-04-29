@@ -88,11 +88,7 @@ import com.waypoint.feature.chat.state.ItineraryPreview
 import com.waypoint.feature.chat.viewmodel.ChatViewModel
 
 @Composable
-fun ChatRoute(
-    onOpenItinerary: (String) -> Unit,
-    onOpenSaved: () -> Unit,
-    viewModel: ChatViewModel = hiltViewModel()
-) {
+fun ChatRoute(onOpenItinerary: (String) -> Unit, onOpenSaved: () -> Unit, viewModel: ChatViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -106,7 +102,7 @@ fun ChatRoute(
     ChatScreen(
         state = state,
         onIntent = viewModel::onIntent,
-        onOpenSaved = onOpenSaved
+        onOpenSaved = onOpenSaved,
     )
 }
 
@@ -116,7 +112,7 @@ internal fun ChatScreen(
     state: ChatUiState,
     onIntent: (ChatIntent) -> Unit,
     modifier: Modifier = Modifier,
-    onOpenSaved: () -> Unit = {}
+    onOpenSaved: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
 
@@ -139,7 +135,7 @@ internal fun ChatScreen(
                         color = borderColor,
                         start = Offset(0f, size.height),
                         end = Offset(size.width, size.height),
-                        strokeWidth = strokeWidth
+                        strokeWidth = strokeWidth,
                     )
                 },
                 title = {
@@ -148,7 +144,7 @@ internal fun ChatScreen(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
-                        letterSpacing = 3.sp
+                        letterSpacing = 3.sp,
                     )
                 },
                 actions = {
@@ -156,13 +152,13 @@ internal fun ChatScreen(
                         Icon(
                             Icons.Default.History,
                             contentDescription = "Saved trips",
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                    containerColor = MaterialTheme.colorScheme.background,
+                ),
             )
         },
         bottomBar = {
@@ -172,19 +168,19 @@ internal fun ChatScreen(
                 isStreaming = state.stream !is ChatUiState.StreamState.Idle,
                 onDraftChange = { onIntent(ChatIntent.DraftChanged(it)) },
                 onSend = { onIntent(ChatIntent.Send) },
-                onCancel = { onIntent(ChatIntent.CancelStream) }
+                onCancel = { onIntent(ChatIntent.CancelStream) },
             )
-        }
+        },
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding),
         ) {
             ErrorBanner(
                 error = state.transientError,
                 onRetry = { onIntent(ChatIntent.RetryLast) },
-                onDismiss = { onIntent(ChatIntent.DismissError) }
+                onDismiss = { onIntent(ChatIntent.DismissError) },
             )
 
             LazyColumn(
@@ -193,7 +189,7 @@ internal fun ChatScreen(
                     .padding(horizontal = 20.dp),
                 state = listState,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
+                contentPadding = PaddingValues(vertical = 16.dp),
             ) {
                 if (state.messages.isEmpty()) {
                     item { EmptyState() }
@@ -209,7 +205,7 @@ internal fun ChatScreen(
                         item(key = "itinerary-preview") {
                             ItineraryPreviewCard(
                                 preview = preview,
-                                onOpen = { onIntent(ChatIntent.OpenItinerary) }
+                                onOpen = { onIntent(ChatIntent.OpenItinerary) },
                             )
                         }
                     }
@@ -226,20 +222,20 @@ private fun EmptyState() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 64.dp, start = 8.dp, end = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = "Where do you want to go?",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(12.dp))
         Text(
             text = "Tell me a destination, how long you have, and what you love to do.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -258,7 +254,7 @@ private fun MessageRow(message: ChatMessage) {
 private fun UserMessage(message: ChatMessage, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = Arrangement.End,
 
     ) {
         Card(
@@ -266,7 +262,7 @@ private fun UserMessage(message: ChatMessage, modifier: Modifier = Modifier) {
                 .widthIn(max = 280.dp)
                 .padding(
                     start = 16.dp,
-                    end = 0.dp
+                    end = 0.dp,
                 )
                 .border(
                     width = 1.dp,
@@ -275,24 +271,24 @@ private fun UserMessage(message: ChatMessage, modifier: Modifier = Modifier) {
                         topStart = 24.dp,
                         topEnd = 24.dp,
                         bottomStart = 24.dp,
-                        bottomEnd = 4.dp
-                    )
+                        bottomEnd = 4.dp,
+                    ),
                 ),
             shape = RoundedCornerShape(
                 topStart = 24.dp,
                 topEnd = 24.dp,
                 bottomStart = 24.dp,
-                bottomEnd = 4.dp
+                bottomEnd = 4.dp,
             ),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.58f)
-            )
+                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.58f),
+            ),
         ) {
             Text(
                 text = message.text,
                 modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
         }
     }
@@ -316,9 +312,9 @@ private fun TypingIndicator() {
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 600, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
+            repeatMode = RepeatMode.Reverse,
         ),
-        label = "alpha"
+        label = "alpha",
     )
 
     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -329,8 +325,8 @@ private fun TypingIndicator() {
                     .background(
                         color = MaterialTheme.colorScheme.primary
                             .copy(alpha = if (i == 0) alpha else alpha * 0.7f),
-                        shape = CircleShape
-                    )
+                        shape = CircleShape,
+                    ),
             )
         }
     }
@@ -339,10 +335,7 @@ private fun TypingIndicator() {
 // ───────────────────── itinerary preview card ─────────────────
 
 @Composable
-private fun ItineraryPreviewCard(
-    preview: ItineraryPreview,
-    onOpen: () -> Unit
-) {
+private fun ItineraryPreviewCard(preview: ItineraryPreview, onOpen: () -> Unit) {
     val shape = RoundedCornerShape(16.dp)
 
     val borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)
@@ -362,24 +355,24 @@ private fun ItineraryPreviewCard(
                     color = borderColor,
                     size = size,
                     cornerRadius = CornerRadius(cornerRadius, cornerRadius),
-                    style = Stroke(width = strokeWidth)
+                    style = Stroke(width = strokeWidth),
                 )
 
                 // Left accent (now clipped correctly)
                 drawRect(
                     color = accentColor,
-                    size = Size(accentWidth, size.height)
+                    size = Size(accentWidth, size.height),
                 )
             },
         shape = shape,
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text(
                 text = if (preview.isComplete) "ITINERARY" else "ITINERARY · STREAMING",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.primary,
-                letterSpacing = 1.5.sp
+                letterSpacing = 1.5.sp,
             )
             Spacer(Modifier.height(8.dp))
 
@@ -387,14 +380,14 @@ private fun ItineraryPreviewCard(
                 text = preview.title ?: "Building your itinerary…",
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
             preview.destination?.let {
                 Spacer(Modifier.height(2.dp))
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -406,7 +399,7 @@ private fun ItineraryPreviewCard(
             AnimatedVisibility(
                 visible = preview.isComplete,
                 enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
+                exit = fadeOut() + shrinkVertically(),
             ) {
                 Column {
                     Spacer(Modifier.height(20.dp))
@@ -423,25 +416,25 @@ private fun OpenItineraryButton(onClick: () -> Unit) {
         onClick = onClick,
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Row(
             modifier = Modifier.padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Open full itinerary",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
             Spacer(Modifier.width(8.dp))
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(16.dp),
             )
         }
     }
@@ -472,16 +465,16 @@ private fun TimelineColumn(days: List<Day>) {
                     color = spineColor.copy(alpha = 0.5f),
                     start = Offset(x, 0f),
                     end = Offset(x, size.height),
-                    strokeWidth = 1.5f
+                    strokeWidth = 1.5f,
                 )
-            }
+            },
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
             days.forEachIndexed { index, day ->
                 TimelineDay(
                     day = day,
                     spineColor = spineColor,
-                    isFirst = index == 0
+                    isFirst = index == 0,
                 )
             }
         }
@@ -489,11 +482,7 @@ private fun TimelineColumn(days: List<Day>) {
 }
 
 @Composable
-private fun TimelineDay(
-    day: Day,
-    spineColor: Color,
-    isFirst: Boolean
-) {
+private fun TimelineDay(day: Day, spineColor: Color, isFirst: Boolean) {
     // A day whose activities haven't arrived yet is "streaming in".
     val isStreamingIn = day.activities.isEmpty() && !isFirst
     val labelAlpha = if (isStreamingIn) 0.45f else 1f
@@ -503,14 +492,14 @@ private fun TimelineDay(
         Row(verticalAlignment = Alignment.CenterVertically) {
             DayMarker(
                 filled = !isStreamingIn,
-                color = spineColor
+                color = spineColor,
             )
             Spacer(Modifier.width(12.dp))
             Text(
                 text = "DAY ${day.dayNumber}: ${day.summary.uppercase()}",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = labelAlpha),
-                letterSpacing = 1.2.sp
+                letterSpacing = 1.2.sp,
             )
         }
 
@@ -538,13 +527,13 @@ private fun TimelineDay(
 private fun DayMarker(filled: Boolean, color: Color) {
     Box(
         modifier = Modifier.size(16.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         if (filled) {
             Box(
                 modifier = Modifier
                     .size(10.dp)
-                    .background(color, CircleShape)
+                    .background(color, CircleShape),
             )
         } else {
             Box(
@@ -553,9 +542,9 @@ private fun DayMarker(filled: Boolean, color: Color) {
                     .border(
                         width = 1.5.dp,
                         color = color.copy(alpha = 0.5f),
-                        shape = CircleShape
+                        shape = CircleShape,
                     )
-                    .background(MaterialTheme.colorScheme.surface, CircleShape)
+                    .background(MaterialTheme.colorScheme.surface, CircleShape),
             )
         }
     }
@@ -565,19 +554,19 @@ private fun DayMarker(filled: Boolean, color: Color) {
 private fun TimelineActivity(activity: Activity, spineColor: Color) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top
+        verticalAlignment = Alignment.Top,
     ) {
         // Small bullet on the spine, vertically aligned with the time text.
         Box(
             modifier = Modifier
                 .size(16.dp)
                 .padding(top = 4.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Box(
                 modifier = Modifier
                     .size(6.dp)
-                    .background(spineColor.copy(alpha = 0.6f), CircleShape)
+                    .background(spineColor.copy(alpha = 0.6f), CircleShape),
             )
         }
         Spacer(Modifier.width(12.dp))
@@ -589,14 +578,14 @@ private fun TimelineActivity(activity: Activity, spineColor: Color) {
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium,
-                    modifier = Modifier.width(56.dp)
+                    modifier = Modifier.width(56.dp),
                 )
                 Text(
                     text = activity.title,
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
             if (activity.description.isNotBlank()) {
@@ -605,7 +594,7 @@ private fun TimelineActivity(activity: Activity, spineColor: Color) {
                     text = activity.description,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 56.dp)
+                    modifier = Modifier.padding(start = 56.dp),
                 )
             }
         }
@@ -620,16 +609,16 @@ private fun ActivityShimmer() {
         targetValue = 0.5f,
         animationSpec = infiniteRepeatable(
             animation = tween(800, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
+            repeatMode = RepeatMode.Reverse,
         ),
-        label = "shimmer-alpha"
+        label = "shimmer-alpha",
     )
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(28.dp)
             .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = alpha))
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = alpha)),
     )
 }
 
@@ -642,36 +631,36 @@ private fun ChatInputBar(
     isStreaming: Boolean,
     onDraftChange: (String) -> Unit,
     onSend: () -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
 ) {
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier
             .fillMaxWidth()
             .navigationBarsPadding()
-            .imePadding()
+            .imePadding(),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Surface(
                 modifier = Modifier.weight(1f),
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.surfaceVariant
+                color = MaterialTheme.colorScheme.surfaceVariant,
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         imageVector = Icons.Default.Mic,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
                     )
                     Spacer(Modifier.width(12.dp))
                     Box(modifier = Modifier.weight(1f)) {
@@ -679,7 +668,7 @@ private fun ChatInputBar(
                             Text(
                                 text = "Ask about your trip…",
                                 style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                         BasicTextField(
@@ -687,17 +676,17 @@ private fun ChatInputBar(
                             onValueChange = onDraftChange,
                             textStyle = LocalTextStyle.current.merge(
                                 MaterialTheme.typography.bodyLarge.copy(
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                ),
                             ),
                             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                             keyboardOptions = KeyboardOptions(
                                 capitalization = KeyboardCapitalization.Sentences,
-                                imeAction = ImeAction.Send
+                                imeAction = ImeAction.Send,
                             ),
                             maxLines = 4,
                             enabled = !isStreaming,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
@@ -709,12 +698,12 @@ private fun ChatInputBar(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.errorContainer)
+                        .background(MaterialTheme.colorScheme.errorContainer),
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowUpward,
                         contentDescription = "Cancel",
-                        tint = MaterialTheme.colorScheme.onErrorContainer
+                        tint = MaterialTheme.colorScheme.onErrorContainer,
                     )
                 }
             } else {
@@ -725,15 +714,21 @@ private fun ChatInputBar(
                         .size(48.dp)
                         .clip(CircleShape)
                         .background(
-                            if (canSend) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.surfaceVariant
-                        )
+                            if (canSend) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.surfaceVariant
+                            },
+                        ),
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                         contentDescription = "Send",
-                        tint = if (canSend) MaterialTheme.colorScheme.onPrimary
-                        else MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = if (canSend) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        },
                     )
                 }
             }
@@ -744,37 +739,33 @@ private fun ChatInputBar(
 // ───────────────────────── error banner ────────────────────────
 
 @Composable
-private fun ErrorBanner(
-    error: AiError?,
-    onRetry: () -> Unit,
-    onDismiss: () -> Unit
-) {
+private fun ErrorBanner(error: AiError?, onRetry: () -> Unit, onDismiss: () -> Unit) {
     AnimatedVisibility(
         visible = error != null,
         enter = expandVertically() + fadeIn(),
-        exit = shrinkVertically() + fadeOut()
+        exit = shrinkVertically() + fadeOut(),
     ) {
         Surface(
             color = MaterialTheme.colorScheme.errorContainer,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
                     text = error?.userMessage().orEmpty(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onErrorContainer,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 if (error.isRetryable()) {
                     IconButton(onClick = onRetry) {
                         Icon(
                             Icons.Default.Refresh,
                             contentDescription = "Retry",
-                            tint = MaterialTheme.colorScheme.onErrorContainer
+                            tint = MaterialTheme.colorScheme.onErrorContainer,
                         )
                     }
                 }
@@ -782,7 +773,7 @@ private fun ErrorBanner(
                     Icon(
                         Icons.Default.Close,
                         contentDescription = "Dismiss",
-                        tint = MaterialTheme.colorScheme.onErrorContainer
+                        tint = MaterialTheme.colorScheme.onErrorContainer,
                     )
                 }
             }
@@ -825,9 +816,9 @@ private fun ChatScreenStreamingPreview() {
                     ChatMessage(
                         "u1",
                         ChatMessage.Role.User,
-                        "4 days in Cape Town, mid-range budget, hiking and food."
+                        "4 days in Cape Town, mid-range budget, hiking and food.",
                     ),
-                    ChatMessage("a1", ChatMessage.Role.Assistant, "", isStreaming = true)
+                    ChatMessage("a1", ChatMessage.Role.Assistant, "", isStreaming = true),
                 ),
                 stream = ChatUiState.StreamState.Streaming(""),
                 itineraryPreview = ItineraryPreview(
@@ -841,24 +832,27 @@ private fun ChatScreenStreamingPreview() {
                                 Activity(
                                     time = "09:00",
                                     title = "Table Mountain cable car",
-                                    description = "Stunning aerial views of the city and coastline. Quick ascent to the plateau.",
+                                    description = "Stunning aerial views of the city and coastline. Quick ascent " +
+                                        "to the plateau.",
                                     locationName = "Table Mountain",
-                                    lat = -33.96, lng = 18.41
+                                    lat = -33.96,
+                                    lng = 18.41,
                                 ),
                                 Activity(
                                     time = "13:30",
                                     title = "Lunch at The Test Kitchen",
                                     description = "A curated culinary journey featuring locally sourced ingredients.",
                                     locationName = "Test Kitchen",
-                                    lat = null, lng = null
-                                )
-                            )
+                                    lat = null,
+                                    lng = null,
+                                ),
+                            ),
                         ),
-                        Day(2, "Cape Point & Boulders", emptyList())
-                    )
-                )
+                        Day(2, "Cape Point & Boulders", emptyList()),
+                    ),
+                ),
             ),
-            onIntent = {}
+            onIntent = {},
         )
     }
 }
