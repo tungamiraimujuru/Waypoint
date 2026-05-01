@@ -4,32 +4,40 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Compose](https://img.shields.io/badge/Jetpack%20Compose-2024.12-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
 
-> **An Android travel planner that streams structured AI output token-by-token, parsing JSON incrementally so days and activities materialise on screen as Claude generates them.**
-> Four days, solo, no shortcuts on architecture or test coverage.
+> **An Android app that streams structured AI into real UI — parsing JSON incrementally so itineraries materialise as the model responds.**  
+> Built solo in four days. Architecture and tests reflect early production, not a demo.
 
 <p align="center">
   <img src="docs/demo.gif" alt="WayPoint streaming demo" width="320" />
 </p>
 
-## The 30-second pitch
+## The pitch
 
-Most "AI in your app" mobile demos do one of two things: render a loading spinner while waiting for the model to finish, then show a wall of text — or stream tokens into a chat bubble while the user squints at JSON. Both miss the actual product opportunity: **streaming structured output is a UX surface, not a network detail**.
+Most AI apps either:
 
-WayPoint is built around that thesis. It treats the streaming response as a sequence of *parseable structural events* rather than text, and renders the itinerary card as those events arrive. Tokens land in the chat bubble while the same buffer simultaneously feeds an incremental parser; the parser emits `TitleResolved`, `DayStarted`, `ActivityEmitted` events; the UI binds to those events; the user watches a real travel itinerary materialise instead of a typewriter spew.
+- Block on a spinner, then render everything at once
+- Stream tokens into a chat bubble (often raw JSON)
 
-I've written more about the journey here: **[Streaming structured AI output into Jetpack Compose — a parser-first approach](#)** *(article forthcoming)*.
+Both treat streaming as a transport detail.
+
+**WayPoint treats streaming as a UX surface.**
+
+The same token stream drives:
+
+- Chat updates (raw tokens)
+- Structured UI (parsed events)
+
+The result: users see a real itinerary form in seconds — not a wall of text.
 
 ---
 
-## Why this problem is interesting
+## Key idea
 
-Three reasons it's worth doing well:
+Streaming AI is not a networking problem.
 
-**1. The naive approach is everywhere and it's bad UX.** ChatGPT-style "stream tokens into a chat bubble" is a lowest-common-denominator pattern. It treats LLM output as text, which is technically correct and product-wise wrong. Travel itineraries, recipes, financial plans, code suggestions — these are *structured artifacts*. Rendering them as text and asking the user to read JSON or wait for a final parse is a missed opportunity worth, in real product terms, conversion rate points.
+It is a **state management problem**.
 
-**2. The right approach surfaces hard engineering problems.** Incremental parsing of streaming JSON is non-trivial — you need to track brace depth string-aware (literal `}` inside strings doesn't close anything), handle truncated buffers, deal with the model occasionally wrapping output in markdown fences despite system-prompt instructions, and stay correct under cooperative cancellation. Solving these well is the difference between "looks slick" and "ships to production."
-
-**3. The architecture that makes this clean is the same architecture that scales.** A pure-function parser with no Android dependency. A reducer that converts events to UI state. An orchestrator interface that decouples the AI layer from features. These aren't ceremony; they're what lets you swap implementations, test in microseconds, and onboard the next engineer without a tour. The streaming requirement *forces* the right shape.
+The challenge is deciding when incomplete data becomes usable UI.
 
 ---
 
@@ -43,22 +51,20 @@ Dark-first by deliberate choice. Travel imagery — food, golden-hour skies, lan
 
 ---
 
-## How it actually works
+## How it works
 
 ```mermaid
 graph LR
-    User[User prompt] --> Chat[ChatViewModel]
-    Chat --> Orch[AiOrchestrator]
-    Orch --> Prompt[PromptBuilder]
-    Orch --> SSE[SseClient]
-    SSE -->|HTTPS SSE| Anthropic[Anthropic API]
-    Anthropic -->|text deltas| SSE
-    SSE --> Parser[StreamingJsonParser]
-    Parser -->|ParseEvents| Orch
-    Orch -->|AiStreamEvents| Chat
-    Chat -->|StateFlow| UI[ChatScreen]
-    Chat -->|Done| Repo[ItineraryRepository]
-    Repo --> Room[(Room SQLite)]
+    User --> ChatViewModel
+    ChatViewModel --> AiOrchestrator
+    AiOrchestrator --> SseClient
+    SseClient --> Anthropic
+    Anthropic --> SseClient
+    SseClient --> StreamingJsonParser
+    StreamingJsonParser --> AiOrchestrator
+    AiOrchestrator --> ChatViewModel
+    ChatViewModel --> UI
+    ChatViewModel --> Repository
 ```
 
 The flow that matters:
@@ -246,6 +252,8 @@ A longer write-up of the workflow — including the prompts I used, the patterns
 | CI | GitHub Actions (build, lint, test, APK on every PR) |
 
 ## Module structure
+
+```
 
 Waypoint/
 ├── app/                    # Application module, navigation, Hilt setup
