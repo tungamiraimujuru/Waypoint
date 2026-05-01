@@ -89,7 +89,7 @@ Each decision is a fork; here's what I picked and what I gave up.
 
 **Why:** The "wait" approach is ~30 lines of code; the incremental approach is ~200. But the UX win is structural — the user sees days appear in 1–2 seconds rather than 8–15 seconds of staring at JSON. For an AI-product demo, that's the entire point of the app. The parser also turned out to be the testability anchor: pure state machine, one fixture-based test covers the happy path, character-by-character feeding test covers boundary handling.
 
-**What I, would revisit:** If Anthropic ships a server-side structured output mode (they're moving that way industry-wide), the parser becomes legacy code. I'd swap it for the typed-output API and keep the orchestrator interface — at which point the rest of the app doesn't notice.
+**What I, would revisit:** If Anthropic ships a server-side structured output mode (they're moving that way industry-wide), the parser becomes legacy code. I would swap it for the typed-output API and keep the orchestrator interface — at which point the rest of the app doesn't notice.
 
 ### No Use Cases between ViewModel and orchestrator
 
@@ -99,7 +99,7 @@ Each decision is a fork; here's what I picked and what I gave up.
 
 **Why:** The `AiOrchestrator` interface is *already* a use-case-shaped boundary — one method, takes a request, returns a domain stream. A `UseCase` wrapper would be a pure pass-through with no behavior added. Use cases earn their keep when orchestration is shared across multiple ViewModels (e.g. a "regenerate itinerary" button on the detail screen invoking the same flow as the chat). v1 doesn't have that; v2 likely will, and that's the natural moment to extract.
 
-**What I, would revisit:** If the team grows past 3 engineers and people start adding business logic into ViewModels, I'd extract use cases preemptively as a discipline tool — not because the architecture demands it, but because the team's review bandwidth does.
+**What I, would revisit:** If the team grows past 3 engineers and people start adding business logic into ViewModels, I would extract use cases preemptively as a discipline tool — not because the architecture demands it, but because the team's review bandwidth does.
 
 ### Single-table Room schema with JSON blob
 
