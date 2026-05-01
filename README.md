@@ -79,7 +79,7 @@ The flow that matters:
 
 ## Decisions that mattered, with the trade-offs
 
-This section is the part of the README where senior reviewers will look hardest. Each decision is a fork; here's what I picked and what I gave up.
+Each decision is a fork; here's what I picked and what I gave up.
 
 ### Custom incremental parser instead of "wait and parse"
 
@@ -89,7 +89,7 @@ This section is the part of the README where senior reviewers will look hardest.
 
 **Why:** The "wait" approach is ~30 lines of code; the incremental approach is ~200. But the UX win is structural — the user sees days appear in 1–2 seconds rather than 8–15 seconds of staring at JSON. For an AI-product demo, that's the entire point of the app. The parser also turned out to be the testability anchor: pure state machine, one fixture-based test covers the happy path, character-by-character feeding test covers boundary handling.
 
-**What I'd revisit:** If Anthropic ships a server-side structured output mode (they're moving that way industry-wide), the parser becomes legacy code. I'd swap it for the typed-output API and keep the orchestrator interface — at which point the rest of the app doesn't notice.
+**What I, would revisit:** If Anthropic ships a server-side structured output mode (they're moving that way industry-wide), the parser becomes legacy code. I'd swap it for the typed-output API and keep the orchestrator interface — at which point the rest of the app doesn't notice.
 
 ### No Use Cases between ViewModel and orchestrator
 
@@ -99,7 +99,7 @@ This section is the part of the README where senior reviewers will look hardest.
 
 **Why:** The `AiOrchestrator` interface is *already* a use-case-shaped boundary — one method, takes a request, returns a domain stream. A `UseCase` wrapper would be a pure pass-through with no behavior added. Use cases earn their keep when orchestration is shared across multiple ViewModels (e.g. a "regenerate itinerary" button on the detail screen invoking the same flow as the chat). v1 doesn't have that; v2 likely will, and that's the natural moment to extract.
 
-**What I'd revisit:** If the team grows past 3 engineers and people start adding business logic into ViewModels, I'd extract use cases preemptively as a discipline tool — not because the architecture demands it, but because the team's review bandwidth does.
+**What I, would revisit:** If the team grows past 3 engineers and people start adding business logic into ViewModels, I'd extract use cases preemptively as a discipline tool — not because the architecture demands it, but because the team's review bandwidth does.
 
 ### Single-table Room schema with JSON blob
 
@@ -109,7 +109,7 @@ This section is the part of the README where senior reviewers will look hardest.
 
 **Why:** WayPoint only needs `getAll()` and `getById()`. Never "find activities by name" or "filter by day count." Normalised storage would mean schema migrations on every domain change. JSON blob trades query power (which I don't need) for migration simplicity (which I always need).
 
-**What I'd revisit:** If a future feature requires cross-itinerary queries — "find all my coffee-shop activities this year" — promote those fields to columns and keep the rest in JSON. Hybrid schema. The migration is a one-time cost.
+**What I, would revisit:** If a future feature requires cross-itinerary queries — "find all my coffee-shop activities this year" — promote those fields to columns and keep the rest in JSON. Hybrid schema. The migration is a one-time cost.
 
 ### Dark-only, no light theme
 
@@ -119,7 +119,7 @@ This section is the part of the README where senior reviewers will look hardest.
 
 **Why:** Supporting both means designing every state twice and shipping two compromised variants. For a four-day timeline focused on streaming UX, that math didn't work. Dark also genuinely fits travel content better — food photography, sunsets, cityscapes have more punch on dark surfaces.
 
-**What I'd revisit:** v2 absolutely. The token system is built for this — the same Amber500/Surface950 tokens map to a different `lightColorScheme()` with no component changes. About a day of work + thorough testing.
+**What I, would revisit:** v2 absolutely. The token system is built for this — the same Amber500/Surface950 tokens map to a different `lightColorScheme()` with no component changes. About a day of work + thorough testing.
 
 ### AGP 8.7 instead of AGP 9
 
@@ -196,19 +196,19 @@ The architecture WayPoint uses is intentionally one that grows. Here's how each 
 
 ---
 
-## What I'd do differently
+## What I, would do differently
 
-The decisions I'd reverse with hindsight:
+The decisions I, would reverse with hindsight:
 
-1. **I'd build the streaming JSON parser test-first, not implementation-first.** I wrote the parser, then wrote tests against it; the bug-fix cycle (state machine flaw, off-by-one in the test fixture) cost ~45 minutes that disciplined TDD would have caught immediately. The parser is exactly the kind of code where the test is the spec.
+1. **I would build the streaming JSON parser test-first, not implementation-first.** I wrote the parser, then wrote tests against it; the bug-fix cycle (state machine flaw, off-by-one in the test fixture) cost ~45 minutes that disciplined TDD would have caught immediately. The parser is exactly the kind of code where the test is the spec.
 
-2. **I'd use Spotless from the start, not as a v2 add-on.** Formatting drifted slightly across modules during the four days. Adding Spotless retrospectively means a "format the whole repo" diff that's hard to review.
+2. **I would use Spotless from the start, not as a v2 add-on.** Formatting drifted slightly across modules during the four days. Adding Spotless retrospectively means a "format the whole repo" diff that's hard to review.
 
-3. **I'd extract a `StreamItineraryUseCase` after all.** Even though my decision to skip use cases is defensible, the "save itinerary on Done" coordination logic ended up in the ViewModel. It's two lines, but it's logic that should be testable in isolation, not entangled with `viewModelScope`. v1.1 work.
+3. **I would extract a `StreamItineraryUseCase` after all.** Even though my decision to skip use cases is defensible, the "save itinerary on Done" coordination logic ended up in the ViewModel. It's two lines, but it's logic that should be testable in isolation, not entangled with `viewModelScope`. v1.1 work.
 
-4. **I'd record performance traces from day one.** The "to measure" gaps in the table above exist because I didn't set up `androidx.tracing` early. Adding it later means re-recording demos and re-running stream tests under instrumentation.
+4. **I would record performance traces from day one.** The "to measure" gaps in the table above exist because I didn't set up `androidx.tracing` early. Adding it later means re-recording demos and re-running stream tests under instrumentation.
 
-5. **I'd version-control the system prompts as JSON files, not Kotlin constants.** `SystemPrompts.ITINERARY_V2` is a string in source. A versioned JSON file would let me A/B prompt changes via remote config without releasing a new APK. Production-grade prompt management is its own discipline.
+5. **I would version-control the system prompts as JSON files, not Kotlin constants.** `SystemPrompts.ITINERARY_V2` is a string in source. A versioned JSON file would let me A/B prompt changes via remote config without releasing a new APK. Production-grade prompt management is its own discipline.
 
 ---
 
@@ -230,7 +230,7 @@ What this *isn't*: "I prompted Claude and it built me an app." That's the pejora
 
 What it *is*: a working demonstration that an experienced engineer with strong architectural intuition can ship lead-level work in four days when AI is leveraged correctly. The skill is in the directing, the reviewing, and the rejecting — not the typing.
 
-I'm flagging this explicitly because how engineers leverage AI in 2026 is itself a skill, and obscuring it would make this document less honest, not more impressive.
+I am flagging this explicitly because how engineers leverage AI in 2026 is itself a skill, and obscuring it would make this document less honest, not more impressive.
 
 A longer write-up of the workflow — including the prompts I used, the patterns that worked, and the patterns that didn't — is the article hooked at the top of this README. If you want the methodology, that's where it'll live.
 
@@ -292,4 +292,4 @@ In rough priority order:
 
 ---
 
-Built by [George Mujuru](https://github.com/tungamiraimujuru) — Senior Android engineer, currently at DVT contracting on Standard Bank's Card team. Open to senior+ Android opportunities, especially at companies pushing AI integration into mobile.
+Built by [George Mujuru](https://github.com/tungamiraimujuru) — Senior Android engineer.
