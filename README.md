@@ -144,6 +144,7 @@ This section exists because shipping streaming code without thinking through fai
 | **Rate limiting** | `AiError.RateLimited(retryAfter)` is mapped from `429` responses. Retries respect the value if Anthropic returns one. UI surfaces a "slow down" message; doesn't burn credit hammering the API. |
 | **API key leakage** | `local.properties` excluded from git, never committed to history (verified). CI uses a stub key that can't talk to Anthropic — we test the build, not the live integration. |
 | **Streaming UI updates causing recomposition storms** | LazyColumn uses stable keys (`message.id`); the streaming message and the itinerary preview card are separate items. State changes are batched into the reducer, which produces one new `ChatUiState` per event, not per token. Manually verified with the Compose layout inspector that recomposition is bounded to the streaming message and the preview card. |
+| **Code style drift across modules** | Spotless + ktlint configured at the root, applied to all subprojects. `spotlessCheck` runs as part of `./gradlew check`, gating every PR. |
 
 The risks I knowingly didn't mitigate, with the reasoning:
 
@@ -202,14 +203,13 @@ The decisions I, would reverse with hindsight:
 
 1. **I would build the streaming JSON parser test-first, not implementation-first.** I wrote the parser, then wrote tests against it; the bug-fix cycle (state machine flaw, off-by-one in the test fixture) cost ~45 minutes that disciplined TDD would have caught immediately. The parser is exactly the kind of code where the test is the spec.
 
-2. **I would use Spotless from the start, not as a v2 add-on.** Formatting drifted slightly across modules during the four days. Adding Spotless retrospectively means a "format the whole repo" diff that's hard to review.
+2. **I would add the pre-commit hook for auto-formatting from the start.** Spotless is gated in CI, but the pre-commit hook that auto-formats staged Kotlin files would catch violations before they ever reach a PR. The 30-second local feedback loop is worth more than the 5-minute CI loop. v1.1 work.
 
 3. **I would extract a `StreamItineraryUseCase` after all.** Even though my decision to skip use cases is defensible, the "save itinerary on Done" coordination logic ended up in the ViewModel. It's two lines, but it's logic that should be testable in isolation, not entangled with `viewModelScope`. v1.1 work.
 
 4. **I would record performance traces from day one.** The "to measure" gaps in the table above exist because I didn't set up `androidx.tracing` early. Adding it later means re-recording demos and re-running stream tests under instrumentation.
 
 5. **I would version-control the system prompts as JSON files, not Kotlin constants.** `SystemPrompts.ITINERARY_V2` is a string in source. A versioned JSON file would let me A/B prompt changes via remote config without releasing a new APK. Production-grade prompt management is its own discipline.
-
 ---
 
 ## How this was actually built
@@ -250,6 +250,7 @@ A longer write-up of the workflow — including the prompts I used, the patterns
 | AI | Anthropic Claude Sonnet 4.5 via Messages API + SSE |
 | Build | AGP 8.7.3, Gradle 8.10.2, JDK 17 |
 | CI | GitHub Actions (build, lint, test, APK on every PR) |
+| Code style | Spotless + ktlint, gated in CI via `./gradlew check` |
 
 ## Module structure
 
