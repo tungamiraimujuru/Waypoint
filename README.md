@@ -291,5 +291,3 @@ In rough priority order:
 6. Light theme via existing token system
 
 ---
-
-Built by [George Mujuru](https://github.com/tungamiraimujuru) — Senior Android engineer.
