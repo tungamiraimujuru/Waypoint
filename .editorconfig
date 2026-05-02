@@ -1,0 +1,37 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# Kotlin
+[*.{kt,kts}]
+max_line_length = 120
+ktlint_code_style = android_studio
+ktlint_standard_function-naming = disabled
+ktlint_standard_backing-property-naming = disabled
+# Trailing commas (Compose-friendly)
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+# Imports
+ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,^
+ij_kotlin_packages_to_use_import_on_demand =
+
+# Class formatting
+ij_kotlin_keep_blank_lines_in_code = 1
+ij_kotlin_keep_blank_lines_in_declarations = 1
+
+
+
+# XML (Android resources)
+[*.xml]
+indent_size = 2
+
+# Markdown / misc
+[*.md]
+trim_trailing_whitespace = false

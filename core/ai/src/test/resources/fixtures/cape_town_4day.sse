@@ -1,0 +1,225 @@
+event: message_start
+data: {"type":"message_start","message":{"model":"claude-sonnet-4-5-20250929","id":"msg_01WrPuKJ9kuLo6PA2vUq9MJj","type":"message","role":"assistant","content":[],"stop_reason":null,"stop_sequence":null,"stop_details":null,"usage":{"input_tokens":111,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":8,"service_tier":"standard","inference_geo":"not_available"}}           }
+
+event: content_block_start
+data: {"type":"content_block_start","index":0,"content_block":{"type":"text","text":""}        }
+
+event: ping
+data: {"type": "ping"}
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"```json\n{\n  \"title"}              }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\": \"4-Day Cape Town Hiking & Food Adventure\",\n  \"destination\": \"Cape Town, South Africa\",\n  \"days\": [\n    {\n      \"day\": 1,\n      \"summary"}          }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\": \"Table Mountain hike and V&A Waterfront dining\",\n      \"activities\": [\n        {\n          \"time\": \"07"}    }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":":00\",\n          \"title\": \"Hike Table Mountain via Platteklip Gor"}          }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ge\",\n          \"description\": \"Start early to hike the most direct route up Table Mountain. Takes "}    }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"2-3 hours. Bring water and sun protection.\",\n          \"locationName\": \"Platteklip Gorge Tr"}         }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ailhead\",\n          \"lat\": -33.9625,\n          \"lng\": 18.4107\n        },\n        {\n          "}}
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\"time\": \"11:00\",\n          \"title\": \"Table Mountain Summit & Cable Car Down\",\n          \"description\": \""}              }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Enjoy panoramic views of Cape Town, then take the cable car down to save your knees.\","}           }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\n          \"locationName\": \"Table Mountain Aerial Cableway\",\n          \"lat\": -33.9577,\n          \"lng\": 18.4095\n        },\n        {\n          "} }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\"time\": \"13:30\",\n          \"title\": \"Lunch at Loading Bay\",\n          \"description\": \"Casual waterfront eatery with excellent"}            }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" burgers and local craft beer at reasonable prices.\",\n          \"locationName\": \"Loading Bay\",\n          \"lat\": -33.9025"}}
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":",\n          \"lng\": 18.4186\n        },\n        {\n          \"time\": \"15:30\",\n          \"title\": \"Explore V&A Waterfront\",\n          "}        }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\"description\": \"Walk around the harbor, browse markets, and enjoy street performers.\",\n          \"locationName\": \"V"}   }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"&A Waterfront\",\n          \"lat\": -33.9025,\n          \"lng\": 18.4232\n        },\n        {\n          \"time\": \"19:00\",\n          \"title\": \"Dinner at Harbour"}    }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" House\",\n          \"description\": \"Fresh seafood with stunning ocean views. Try the line"}       }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"fish and local wines.\",\n          \"locationName\": \"Harbour House\",\n          \"lat\": -33.9156,\n          \"lng\": 18.3"}    }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"779\n        }\n      ]\n    },\n    {\n      \"day\": 2,\n      \"summary\": \"Lion's Head sunrise hike and Bo-Kaap exploration\",\n      "}  }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\"activities\": [\n        {\n          \"time\": \"05:00\",\n          \"title\": \"Sunrise Hike up Lion's Head\",\n          \"description\": \"Popular "}               }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"2-hour round trip hike with 360-degree views of Cape Town. Some chains and lad"}             }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ders near the top.\",\n          \"locationName\": \"Lion's Head Trailhead\",\n          \"lat\": -33.9381,\n          \"lng\": 18.3958\n        },\n        {\n          "}}
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\"time\": \"08:30\",\n          \"title\": \"Breakfast at Hemelhuijs"}             }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\",\n          \"description\": \"Cozy spot in the city center with excellent breakfast"}               }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" options and locally-sourced ingredients.\",\n          \"locationName\": \"Hemelhuijs\",\n          \"lat\": -33.9249,\n          \"lng\": 18.4168\n        },\n        {"} }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\n          \"time\": \"10:30\",\n          \"title\": \"Bo-Kaap Walking Tour\",\n          \"description\": \"Explore the colorful Ma"}        }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"lay Quarter, visit the Bo-Kaap Museum, and learn about Cape Malay culture.\",\n          \"locationName\": \"Bo-Kaap\",\n          \"lat\": -33"}     }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":".9167,\n          \"lng\": 18.4115\n        },\n        {\n          \"time\": \"13:00\",\n          \"title\": \"Lunch at B"}               }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"iesmiellah\",\n          \"description\": \"Authentic Cape Malay cuisine. Try the lamb curry"}  }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" and koeksisters. Very affordable.\",\n          \"locationName\": \"Biesmiellah Restaurant"}               }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\",\n          \"lat\": -33.9142,\n          \"lng\": 18.4099\n        },\n        {\n          \"time\": \"15:00\",\n          \"title\": \"Company's Garden"}       }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" & Free Walking Tour\",\n          \"description\": \"Stroll through historic gardens and visit free museums nearby.\",\n          \"locationName\": \""}}
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Company's Garden\",\n          \"lat\": -33.9361,\n          \"lng\": 18.4199\n        },\n        {\n          \"time\": \"19:00\",\n          \"title\":"}       }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" \"Dinner at The Pot Luck Club\",\n          \"description\": \"Tapas-"}     }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"style sharing plates with creative cuisine and city views. Book"}      }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" ahead.\",\n          \"locationName\": \"The Pot Luck Club\",\n          \"lat\": -33.9216,\n          \"lng\": 18.4188\n        }\n      ]\n    },\n    {\n      \"day"}       }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\": 3,\n      \"summary\": \"Cape Point day trip and coastal dining\",\n      \"activities\": [\n        {\n          \"time\": \"07"}  }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":":30\",\n          \"title\": \"Drive to Cape Point\",\n          \"description\": \"Scenic 1-hour drive along Chapman"}   }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"'s Peak Drive (toll road with incredible coastal views).\",\n          \"locationName\": \"Chapman"}          }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"'s Peak Drive\",\n          \"lat\": -34.0833,\n          \"lng\": 18.3542\n        },\n        {\n          \"time\": \"09:00\",\n          \"title\":"}      }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" \"Hike Cape Point\",\n          \"description\": \"Hike to the lighthouse and explore the rugged coastline. Look for baboons"}             }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":", ostriches, and antelope.\",\n          \"locationName\": \"Cape Point\",\n          \"lat\": -34.3570"}       }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":",\n          \"lng\": 18.4977\n        },\n        {\n          \"time\": \"12:00\",\n          \"title\": \"Lunch at Two Oceans Restaurant"}           }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\",\n          \"description\": \"Casual dining at Cape Point with seafood and views where two oceans meet.\",\n          \"location"} }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Name\": \"Two Oceans Restaurant\",\n          \"lat\": -34.3544,\n          \"lng\": 18.4961\n        },\n        {\n          \"time\": \"14:00\",\n          \"title\": \"Boulder"}      }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"'s Beach Penguin Colony\",\n          \"description\": \"Visit African penguins in"} }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" their natural habitat. Small entrance fee.\",\n          \"locationName\": \"Boulders Beach\",\n          \"lat\": -34.1"}       }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"975,\n          \"lng\": 18.4511\n        },\n        {\n          \"time\": \"16:00\",\n          \"title\": \"Kalk Bay Exploration"}   }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\",\n          \"description\": \"Browse antique shops, art galleries, and the harbor in this charming fishing village.\",\n          \"locationName\":"}            }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" \"Kalk Bay\",\n          \"lat\": -34.1285,\n          \"lng\": 18.4478\n        },\n        {\n          \"time\": \"18:30\",\n          \"title\": \"Dinner at Kal"}             }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ky's\",\n          \"description\": \"Fresh fish and chips right on the harbor"}          }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":". Order at the counter and enjoy the local atmosphere.\",\n          \"locationName\": \"Kalky's Fish & Chips\",\n          \"lat"}       }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\": -34.1281,\n          \"lng\": 18.4473\n        }\n      ]\n    },\n    {\n      \"day\": 4,\n      \"summary\": \"Constant"}          }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ia wine valley hike and tastings\",\n      \"activities\": [\n        {\n          \"time\": \"08:00\",\n          \"title\": \"Hike Cec"}      }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ilia Forest Trail\",\n          \"description\": \"Moderate 2-3 hour forest hike with waterfalls and mountain views in"}     }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" the Constantia area.\",\n          \"locationName\": \"Cecilia Forest\",\n          \"lat\": -33.9975,\n          \"lng\": 18.4306\n        },\n        {\n          "}              }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\"time\": \"11:30\",\n          \"title\": \"Wine Tasting at Groot Constantia\",\n          \"description\": \"South Africa's oldest"}   }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" wine estate. Affordable tastings and beautiful historic buildings.\",\n          \"locationName\": \"Groot Constantia\",\n          \"lat\": -34"}           }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":".0146,\n          \"lng\": 18.4264\n        },\n        {\n          \"time\": \"13:30\",\n          \"title\": \"Lunch at Jonk"}     }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"ershuis Restaurant\",\n          \"description\": \"Traditional Cape cuisine on the Groot"} }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" Constantia estate with excellent wine pairings.\",\n          \"locationName\": \"Jonkershuis Restaurant\",\n          \"lat\": -34.0147,\n          \"lng\": 18"}           }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":".4267\n        },\n        {\n          \"time\": \"15:30\",\n          \"title\": \"Wine Tasting at Beau Constantia\",\n          \"description\": \"Modern"}               }
+
+event: ping
+data: {"type": "ping"}
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" winery with spectacular views over False Bay. Affordable tastings.\",\n          \"locationName\": \"Beau Constantia\",\n          \"lat\": -34"}}
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":".0069,\n          \"lng\": 18.4092\n        },\n        {\n          \"time\": \"18:00\",\n          \"title\": \"Sunset at Camps Bay Beach"}          }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"\",\n          \"description\": \"Relax on the beach with views of the Twelve Apostles mountains.\",\n          \"locationName\": \""}        }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"Camps Bay Beach\",\n          \"lat\": -33.9523,\n          \"lng\": 18.3775\n        },\n        {\n          \"time\": \"19"}          }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":":30\",\n          \"title\": \"Farewell Dinner at Codfather\",\n          \"description\": \"Select your own fresh seafood and"}              }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" they'll prepare it. Great value for quality seafood.\",\n          \"locationName\": \"Codfather Seafood &"} }
+
+event: content_block_delta
+data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":" Sushi\",\n          \"lat\": -33.9531,\n          \"lng\": 18.3772\n        }\n      ]\n    }\n  ]\n}\n```"}              }
+
+event: content_block_stop
+data: {"type":"content_block_stop","index":0   }
+
+event: message_delta
+data: {"type":"message_delta","delta":{"stop_reason":"end_turn","stop_sequence":null,"stop_details":null},"usage":{"input_tokens":111,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":2301}             }
+
+event: message_stop
+data: {"type":"message_stop"}
+
