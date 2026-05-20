@@ -56,7 +56,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -115,10 +118,42 @@ internal fun ChatScreen(
     onOpenSaved: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(state.messages.size, state.stream) {
-        if (state.messages.isNotEmpty()) {
-            listState.animateScrollToItem(state.messages.lastIndex)
+// Track whether the user is at (or very near) the bottom of the list.
+// We only auto-scroll if they are — otherwise we respect their manual scrolling.
+    val isAtBottom by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val visibleItems = layoutInfo.visibleItemsInfo
+            if (visibleItems.isEmpty()) return@derivedStateOf true
+
+            val lastVisibleItem = visibleItems.last()
+            val totalItems = layoutInfo.totalItemsCount
+            // Consider "at bottom" if the last visible item is the final item
+            // and its bottom edge is fully visible (within a small threshold).
+            lastVisibleItem.index == totalItems - 1 &&
+                lastVisibleItem.offset + lastVisibleItem.size <=
+                layoutInfo.viewportEndOffset + 50
+        }
+    }
+
+// Auto-scroll to bottom only when:
+// 1. The user is already at the bottom (following along), AND
+// 2. New content has arrived (message count or stream state changed)
+    LaunchedEffect(state.messages.size, state.stream, state.itineraryPreview) {
+        if (isAtBottom && state.messages.isNotEmpty()) {
+            // Calculate total item count: messages + optional itinerary preview
+            val totalItems = state.messages.size +
+                if (state.itineraryPreview?.hasContent == true) 1 else 0
+
+            // Use scrollToItem (not animateScrollToItem) during active streaming
+            // to avoid animation queue buildup at high event frequency.
+            if (state.stream is ChatUiState.StreamState.Streaming) {
+                listState.scrollToItem(totalItems - 1)
+            } else {
+                listState.animateScrollToItem(totalItems - 1)
+            }
         }
     }
 
